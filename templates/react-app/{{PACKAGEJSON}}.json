@@ -16,7 +16,6 @@
     "clean": "plz clean",
     "test": "plz test",
     "test:watch": "plz test --watch",
-    "prepublish": "npm run build",
     "postinstall": "npm run bootstrap",
     "stats": "webpack-bundle-analyzer public/stats.json public",
     "lint": "eslint \"src/**/*.js\"",
