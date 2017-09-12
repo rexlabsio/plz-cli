@@ -1,0 +1,11 @@
+{
+  "extends": [ "@rexlabs/semistandard" ],
+  "overrides": [
+    {
+      "files": [ "**/__tests__/**/*.js", "**/*{.test,.spec}.js" ],
+      "env": {
+        "jest": true
+      }
+    }
+  ]
+}

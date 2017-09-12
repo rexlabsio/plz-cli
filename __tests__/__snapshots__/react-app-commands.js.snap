@@ -1,0 +1,177 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`react-app should build project 1`] = `"cmd: npm run,build {\\"cwd\\":\\"<CLI_DIR>/.test-output/test-react-app\\"}"`;
+
+exports[`react-app should build project 2`] = `
+"stdoutDump:
+
+> test-react-app-app@0.0.0 build <CLI_DIR>/.test-output/test-react-app
+> plz build
+
+
+ -:  p l z   b u i l d  :-
+
+"
+`;
+
+exports[`react-app should build project 3`] = `
+"stderrDump:
+✔ Built app.
+"
+`;
+
+exports[`react-app should build project 4`] = `
+Array [
+  "app.e42b9a1c.js",
+  "index.html",
+  "manifest.d41d8cd9.js",
+  "vendor.e2e4a9fd.js",
+]
+`;
+
+exports[`react-app should clean project 1`] = `"cmd: npm run,clean {\\"cwd\\":\\"<CLI_DIR>/.test-output/test-react-app\\"}"`;
+
+exports[`react-app should clean project 2`] = `
+"stdoutDump:
+
+> test-react-app-app@0.0.0 clean <CLI_DIR>/.test-output/test-react-app
+> plz clean
+
+
+ -:  p l z   c l e a n  :-
+
+"
+`;
+
+exports[`react-app should clean project 3`] = `
+"stderrDump:
+✔ Cleaned.
+"
+`;
+
+exports[`react-app should create project 1`] = `"cmd: <CLI_DIR>/index.js create,test-react-app,<CLI_DIR>/.test-output,--type,react-app {}"`;
+
+exports[`react-app should create project 2`] = `
+"stdoutDump:
+
+ -:  p l z   c r e a t e  :-
+
+"
+`;
+
+exports[`react-app should create project 3`] = `
+"stderrDump:
+✔ Fetched scaffold metadata
+✔ Generated 'React App': .test-output/test-react-app
+"
+`;
+
+exports[`react-app should create project 4`] = `
+Array [
+  ".editorconfig",
+  ".eslintrc",
+  ".gitignore",
+  "env.default.js",
+  "package.json",
+  "readme.md",
+  "src",
+  "support",
+]
+`;
+
+exports[`react-app should install deps in project 1`] = `"cmd: yarn install,--ignore-scripts,--no-progress {\\"cwd\\":\\"<CLI_DIR>/.test-output/test-react-app\\"}"`;
+
+exports[`react-app should install deps in project 2`] = `
+"stdoutDump:
+"
+`;
+
+exports[`react-app should install deps in project 3`] = `
+"stderrDump:
+warning Ignored scripts due to flag.
+"
+`;
+
+exports[`react-app should link current cli into project 1`] = `"cmd: yarn unlink {\\"cwd\\":\\"<CLI_DIR>\\"}"`;
+
+exports[`react-app should link current cli into project 2`] = `
+"stdoutDump:
+"
+`;
+
+exports[`react-app should link current cli into project 3`] = `
+"stderrDump:
+"
+`;
+
+exports[`react-app should link current cli into project 4`] = `"cmd: yarn link {\\"cwd\\":\\"<CLI_DIR>\\"}"`;
+
+exports[`react-app should link current cli into project 5`] = `
+"stdoutDump:
+"
+`;
+
+exports[`react-app should link current cli into project 6`] = `
+"stderrDump:
+"
+`;
+
+exports[`react-app should link current cli into project 7`] = `"cmd: yarn link,@rexlabs/plz-cli {\\"cwd\\":\\"<CLI_DIR>/.test-output/test-react-app\\"}"`;
+
+exports[`react-app should link current cli into project 8`] = `
+"stdoutDump:
+"
+`;
+
+exports[`react-app should link current cli into project 9`] = `
+"stderrDump:
+"
+`;
+
+exports[`react-app should run valid test in project 1`] = `"cmd: npm run,test {\\"cwd\\":\\"<CLI_DIR>/.test-output/test-react-app\\"}"`;
+
+exports[`react-app should run valid test in project 2`] = `
+"stdoutDump:
+
+> test-react-app-app@0.0.0 test <CLI_DIR>/.test-output/test-react-app
+> plz test
+
+
+ -:  p l z   t e s t  :-
+
+"
+`;
+
+exports[`react-app should run valid test in project 3`] = `
+"stderrDump:
+fallbackLoader option has been deprecated - replace with \\"fallback\\"
+loader option has been deprecated - replace with \\"use\\"
+fallbackLoader option has been deprecated - replace with \\"fallback\\"
+loader option has been deprecated - replace with \\"use\\"
+ FAIL  src/__tests__/test-react-app.js
+  ● Test suite failed to run
+
+    TypeError: $export is not a function
+      
+      at Object.<anonymous> (node_modules/core-js/library/modules/es6.object.define-property.js:3:1)
+      at Object.<anonymous> (node_modules/core-js/library/fn/object/define-property.js:1:103)
+      at Object.<anonymous> (node_modules/babel-runtime/core-js/object/define-property.js:1:133)
+      at Object.<anonymous> (node_modules/core-js/library/modules/_object-dp.js:1:125)
+      at Object.<anonymous> (node_modules/core-js/library/modules/_hide.js:1:112)
+      at Object.<anonymous> (node_modules/core-js/library/modules/_export.js:4:8)
+      at Object.<anonymous> (node_modules/core-js/library/modules/_iter-define.js:3:11)
+      at Object.<anonymous> (node_modules/core-js/library/modules/es6.string.iterator.js:5:1)
+      at Object.<anonymous> (node_modules/core-js/library/fn/promise.js:2:1)
+      at Object.<anonymous> (node_modules/babel-runtime/core-js/promise.js:1:133)
+      at Object.<anonymous> (src/utils/globals.js:1:118)
+      at Object.<anonymous> (src/index.js:13:1)
+      at Object.<anonymous> (src/__tests__/test-react-app.js:1:111)
+      at process._tickCallback (internal/process/next_tick.js:109:7)
+
+Test Suites: 1 failed, 1 total
+Tests:       0 total
+Snapshots:   0 total
+Time:        <TIMESTAMP>
+Ran all test suites.
+"
+`;

@@ -1,0 +1,68 @@
+{
+  "name": "@rexlabs/plz-cli",
+  "version": "1.27.0",
+  "description": "Toolkit for generating, building & testing packages.",
+  "engines": {
+    "node": ">=7.x"
+  },
+  "bin": {
+    "plz": "index.js"
+  },
+  "files": [
+    "index.js",
+    "src/",
+    "support/",
+    "templates/"
+  ],
+  "scripts": {
+    "test": "jest -u --testPathPattern \"$(pwd)/__tests__\"",
+    "test:watch": "jest --watch -u --testPathPattern \"$(pwd)/__tests__\""
+  },
+  "author": "Rex Software <lochlan.bunn@rexsoftware.com.au>",
+  "repository": "git@bitbucket.org:rexsoftware/heidi.git",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@storybook/addon-actions": "^3.2.0",
+    "@storybook/addon-info": "^3.2.0",
+    "@storybook/addon-knobs": "^3.2.0",
+    "@storybook/addon-options": "^3.2.3",
+    "@storybook/addon-storyshots": "^3.2.3",
+    "@storybook/react": "^3.2.3",
+    "babel-jest": "^20.0.3",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-3": "^6.24.1",
+    "chalk": "^1.1.3",
+    "change-case": "^3.0.1",
+    "copy-template-dir": "^1.3.0",
+    "debug": "^2.6.7",
+    "enzyme": "^2.9.1",
+    "figlet": "^1.2.0",
+    "file-loader": "^0.11.2",
+    "fs-extra": "^3.0.1",
+    "glob-loader": "^0.3.0",
+    "html-webpack-plugin": "^2.30.1",
+    "jest": "^20.0.4",
+    "lodash": "^4.17.4",
+    "nwb": "^0.15.8",
+    "ora": "^1.3.0",
+    "pify": "^2.3.0",
+    "raw-loader": "^0.5.1",
+    "react-addons-test-utils": "^15.5.1",
+    "react-test-renderer": "^15.5.4",
+    "read-pkg-up": "^2.0.0",
+    "stats-webpack-plugin": "^0.6.1",
+    "storybook-readme": "^3.0.6",
+    "svg-react-loader": "^0.4.4",
+    "webpack-merge": ">=2.4.0",
+    "yargonaut": "^1.1.2",
+    "yargs": "^8.0.2"
+  },
+  "peerDependencies": {
+    "react": ">=15.5.0 <16.0.0",
+    "react-dom": ">=15.5.0 <16.0.0"
+  }
+}

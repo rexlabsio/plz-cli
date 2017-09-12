@@ -1,0 +1,73 @@
+{
+  "private": true,
+  "name": "{{SLUGGED_NAME}}-app",
+  "repository": "{{GIT_REMOTE_URL}}",
+  "version": "0.0.0",
+  "description": "{{TITLE_NAME}}",
+  "files": [
+    "package.json",
+    "readme.md"
+  ],
+  "scripts": {
+    "bootstrap": "cp -n env.default.js env.js || true",
+    "start": "plz serve",
+    "storybook": "plz stories",
+    "build": "plz build",
+    "clean": "plz clean",
+    "test": "plz test",
+    "test:watch": "plz test --watch",
+    "prepublish": "npm run build",
+    "postinstall": "npm run bootstrap",
+    "stats": "webpack-bundle-analyzer public/stats.json public",
+    "lint": "eslint \"src/**/*.js\"",
+    "reformat": "prettier-eslint --write \"src/**/*.js\"",
+    "precommit": "lint-staged"
+  },
+  "dependencies": {
+    "@rexlabs/api-client": "{{API_CLIENT_JS_VERSION}}",
+    "@rexlabs/styling": "{{STYLING_JS_VERSION}}",
+    "bluebird": "^3.5.0",
+    "invariant": "^2.2.2",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1",
+    "prop-types": "{{REACT_VERSION}}",
+    "react": "{{REACT_VERSION}}",
+    "react-dom": "{{REACT_VERSION}}",
+    "react-redux": "^5.0.4",
+    "redux": "^3.6.0",
+    "redux-persist": "^4.8.0",
+    "redux-thunk": "^2.2.0",
+    "warning": "^3.0.0"
+  },
+  "devDependencies": {
+    "{{CLI_NAME}}": "{{CLI_VERSION}}",
+    "@rexlabs/eslint-config-semistandard": "^1.0.2",
+    "eslint": "^3.19.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^4.0.1",
+    "prettier-eslint-cli": "^4.1.1",
+    "redux-devtools-extension": "^2.13.0",
+    "redux-logger": "^3.0.1",
+    "remote-redux-devtools": "^0.5.7",
+    "webpack-bundle-analyzer": "^2.8.2"
+  },
+  "author": "Rex Software",
+  "license": "UNLICENSED",
+  "lint-staged": {
+    "linters": {
+      "**/*.js": [
+        "prettier-eslint --write",
+        "git add",
+        "eslint"
+      ]
+    }
+  },
+  "config": {
+    "plz": {
+      "type": "react-app",
+      "storybook": {
+        "name": "{{TITLE_NAME}}"
+      }
+    }
+  }
+}

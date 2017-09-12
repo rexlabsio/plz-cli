@@ -1,0 +1,6 @@
+# Test output
+/.test-output
+
+# Dynamically created pattern file
+src/configs/storybook/stories.pattern
+src/configs/storybook/readmes.pattern

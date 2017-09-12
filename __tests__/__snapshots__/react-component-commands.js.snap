@@ -1,0 +1,196 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`react-component should build project 1`] = `"cmd: npm run,build {\\"cwd\\":\\"<CLI_DIR>/.test-output/test-react-component\\"}"`;
+
+exports[`react-component should build project 2`] = `
+"stdoutDump:
+
+> @rexlabs/test-react-component@1.0.0 build <CLI_DIR>/.test-output/test-react-component
+> plz build
+
+
+ -:  p l z   b u i l d  :-
+
+"
+`;
+
+exports[`react-component should build project 3`] = `
+"stderrDump:
+✔ Built bundles.
+"
+`;
+
+exports[`react-component should build project 4`] = `
+Array [
+  "index.js",
+  "test-react-component.js",
+]
+`;
+
+exports[`react-component should clean project 1`] = `"cmd: npm run,clean {\\"cwd\\":\\"<CLI_DIR>/.test-output/test-react-component\\"}"`;
+
+exports[`react-component should clean project 2`] = `
+"stdoutDump:
+
+> @rexlabs/test-react-component@1.0.0 clean <CLI_DIR>/.test-output/test-react-component
+> plz clean
+
+
+ -:  p l z   c l e a n  :-
+
+"
+`;
+
+exports[`react-component should clean project 3`] = `
+"stderrDump:
+✔ Cleaned.
+"
+`;
+
+exports[`react-component should create project 1`] = `"cmd: <CLI_DIR>/index.js create,test-react-component,<CLI_DIR>/.test-output {}"`;
+
+exports[`react-component should create project 2`] = `
+"stdoutDump:
+
+ -:  p l z   c r e a t e  :-
+
+"
+`;
+
+exports[`react-component should create project 3`] = `
+"stderrDump:
+✔ Fetched scaffold metadata
+✔ Generated 'React Component': .test-output/test-react-component
+"
+`;
+
+exports[`react-component should create project 4`] = `
+Array [
+  "package.json",
+  "readme.md",
+  "src",
+]
+`;
+
+exports[`react-component should install deps in project 1`] = `"cmd: yarn install,--ignore-scripts,--no-progress {\\"cwd\\":\\"<CLI_DIR>/.test-output/test-react-component\\"}"`;
+
+exports[`react-component should install deps in project 2`] = `
+"stdoutDump:
+"
+`;
+
+exports[`react-component should install deps in project 3`] = `
+"stderrDump:
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+warning Ignored scripts due to flag.
+"
+`;
+
+exports[`react-component should link current cli into project 1`] = `"cmd: yarn unlink {\\"cwd\\":\\"<CLI_DIR>\\"}"`;
+
+exports[`react-component should link current cli into project 2`] = `
+"stdoutDump:
+"
+`;
+
+exports[`react-component should link current cli into project 3`] = `
+"stderrDump:
+"
+`;
+
+exports[`react-component should link current cli into project 4`] = `"cmd: yarn link {\\"cwd\\":\\"<CLI_DIR>\\"}"`;
+
+exports[`react-component should link current cli into project 5`] = `
+"stdoutDump:
+"
+`;
+
+exports[`react-component should link current cli into project 6`] = `
+"stderrDump:
+"
+`;
+
+exports[`react-component should link current cli into project 7`] = `"cmd: yarn link,@rexlabs/plz-cli {\\"cwd\\":\\"<CLI_DIR>/.test-output/test-react-component\\"}"`;
+
+exports[`react-component should link current cli into project 8`] = `
+"stdoutDump:
+"
+`;
+
+exports[`react-component should link current cli into project 9`] = `
+"stderrDump:
+"
+`;
+
+exports[`react-component should run valid test in project 1`] = `"cmd: npm run,test {\\"cwd\\":\\"<CLI_DIR>/.test-output/test-react-component\\"}"`;
+
+exports[`react-component should run valid test in project 2`] = `
+"stdoutDump:
+
+> @rexlabs/test-react-component@1.0.0 test <CLI_DIR>/.test-output/test-react-component
+> plz test
+
+
+ -:  p l z   t e s t  :-
+
+  console.warn ../../../../node_modules/react/lib/lowPriorityWarning.js:40
+    Warning: Accessing createClass via the main React package is deprecated, and will be removed in React v16.0. Use a plain JavaScript class instead. If you're not yet ready to migrate, create-react-class v15.* is available on npm as a temporary, drop-in replacement. For more info see https://fb.me/react-create-class
+
+"
+`;
+
+exports[`react-component should run valid test in project 3`] = `
+"stderrDump:
+fallbackLoader option has been deprecated - replace with \\"fallback\\"
+loader option has been deprecated - replace with \\"use\\"
+fallbackLoader option has been deprecated - replace with \\"fallback\\"
+loader option has been deprecated - replace with \\"use\\"
+ PASS  src/__tests__/storyshots.js
+  Storyshots
+    TestReactComponent
+      ✓ default (<TIMESTAMP>)
+
+Snapshot Summary
+ › 1 snapshot written in 1 test suite.
+
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   1 added, 1 total
+Time:        <TIMESTAMP>, estimated <TIMESTAMP>
+Ran all test suites.
+"
+`;

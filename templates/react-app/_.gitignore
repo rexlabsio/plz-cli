@@ -1,0 +1,6 @@
+/coverage
+/public
+node_modules
+npm-debug.log*
+/env.js
+yarn-error.log

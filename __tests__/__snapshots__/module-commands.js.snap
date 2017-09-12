@@ -1,0 +1,187 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`module (node) should build project 1`] = `"cmd: npm run,build {\\"cwd\\":\\"<CLI_DIR>/.test-output/test-module\\"}"`;
+
+exports[`module (node) should build project 2`] = `
+"stdoutDump:
+
+> @rexlabs/test-module@1.0.0 build <CLI_DIR>/.test-output/test-module
+> plz build
+
+
+ -:  p l z   b u i l d  :-
+
+"
+`;
+
+exports[`module (node) should build project 3`] = `
+"stderrDump:
+✔ Built bundles.
+"
+`;
+
+exports[`module (node) should build project 4`] = `
+Array [
+  "index.js",
+]
+`;
+
+exports[`module (node) should clean project 1`] = `"cmd: npm run,clean {\\"cwd\\":\\"<CLI_DIR>/.test-output/test-module\\"}"`;
+
+exports[`module (node) should clean project 2`] = `
+"stdoutDump:
+
+> @rexlabs/test-module@1.0.0 clean <CLI_DIR>/.test-output/test-module
+> plz clean
+
+
+ -:  p l z   c l e a n  :-
+
+"
+`;
+
+exports[`module (node) should clean project 3`] = `
+"stderrDump:
+✔ Cleaned.
+"
+`;
+
+exports[`module (node) should create project 1`] = `"cmd: <CLI_DIR>/index.js create,test-module,<CLI_DIR>/.test-output,--type,module {}"`;
+
+exports[`module (node) should create project 2`] = `
+"stdoutDump:
+
+ -:  p l z   c r e a t e  :-
+
+"
+`;
+
+exports[`module (node) should create project 3`] = `
+"stderrDump:
+✔ Fetched scaffold metadata
+✔ Generated 'Module': .test-output/test-module
+"
+`;
+
+exports[`module (node) should create project 4`] = `
+Array [
+  "package.json",
+  "readme.md",
+  "src",
+]
+`;
+
+exports[`module (node) should install deps in project 1`] = `"cmd: yarn install,--ignore-scripts,--no-progress {\\"cwd\\":\\"<CLI_DIR>/.test-output/test-module\\"}"`;
+
+exports[`module (node) should install deps in project 2`] = `
+"stdoutDump:
+"
+`;
+
+exports[`module (node) should install deps in project 3`] = `
+"stderrDump:
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+warning Ignored scripts due to flag.
+"
+`;
+
+exports[`module (node) should link current cli into project 1`] = `"cmd: yarn unlink {\\"cwd\\":\\"<CLI_DIR>\\"}"`;
+
+exports[`module (node) should link current cli into project 2`] = `
+"stdoutDump:
+"
+`;
+
+exports[`module (node) should link current cli into project 3`] = `
+"stderrDump:
+"
+`;
+
+exports[`module (node) should link current cli into project 4`] = `"cmd: yarn link {\\"cwd\\":\\"<CLI_DIR>\\"}"`;
+
+exports[`module (node) should link current cli into project 5`] = `
+"stdoutDump:
+"
+`;
+
+exports[`module (node) should link current cli into project 6`] = `
+"stderrDump:
+"
+`;
+
+exports[`module (node) should link current cli into project 7`] = `"cmd: yarn link,@rexlabs/plz-cli {\\"cwd\\":\\"<CLI_DIR>/.test-output/test-module\\"}"`;
+
+exports[`module (node) should link current cli into project 8`] = `
+"stdoutDump:
+"
+`;
+
+exports[`module (node) should link current cli into project 9`] = `
+"stderrDump:
+"
+`;
+
+exports[`module (node) should run valid test in project 1`] = `"cmd: npm run,test {\\"cwd\\":\\"<CLI_DIR>/.test-output/test-module\\"}"`;
+
+exports[`module (node) should run valid test in project 2`] = `
+"stdoutDump:
+
+> @rexlabs/test-module@1.0.0 test <CLI_DIR>/.test-output/test-module
+> plz test
+
+
+ -:  p l z   t e s t  :-
+
+"
+`;
+
+exports[`module (node) should run valid test in project 3`] = `
+"stderrDump:
+fallbackLoader option has been deprecated - replace with \\"fallback\\"
+loader option has been deprecated - replace with \\"use\\"
+fallbackLoader option has been deprecated - replace with \\"fallback\\"
+loader option has been deprecated - replace with \\"use\\"
+ PASS  src/__tests__/test-module.js
+  testModule
+    ✓ should throw an error (<TIMESTAMP>)
+
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        <TIMESTAMP>, estimated <TIMESTAMP>
+Ran all test suites.
+"
+`;

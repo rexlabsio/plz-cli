@@ -1,0 +1,35 @@
+{
+  "name": "@rexlabs/{{SLUGGED_NAME}}",
+  "repository": "{{GIT_REMOTE_URL}}",
+  "version": "1.0.0",
+  "description": "{{TITLE_NAME}}",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "plz:main": "src/index.js",
+  "files": [
+    "lib",
+    "es",
+    "package.json",
+    "readme.md"
+  ],
+  "scripts": {
+    "build": "plz build",
+    "clean": "plz clean",
+    "test": "plz test",
+    "test:watch": "plz test --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "{{CLI_NAME}}": "{{CLI_VERSION}}"
+  },
+  "author": "Rex Software{{HAS_AUTHOR_EMAIL}}{{AUTHOR_EMAIL}}",
+  "license": "UNLICENSED",
+  "keywords": [],
+  "config": {
+    "plz": {
+      "type": "module"
+    }
+  }
+}

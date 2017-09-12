@@ -1,0 +1,183 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`cli should show usage details 1`] = `"cmd: <CLI_DIR>/index.js help {}"`;
+
+exports[`cli should show usage details 2`] = `
+"stdoutDump:
+
+              ___
+             /\\\\_ \\\\
+   _____     \\\\//\\\\ \\\\       ____
+  /\\\\  __\`\\\\     \\\\ \\\\ \\\\     /\\\\_  \`\\\\
+  \\\\ \\\\ \\\\L\\\\ \\\\     \\\\_\\\\ \\\\_   \\\\/_/  /_
+   \\\\ \\\\  __/     /\\\\____\\\\    /\\\\____\\\\
+    \\\\ \\\\ \\\\/      \\\\/____/    \\\\/____/
+     \\\\ \\\\_\\\\
+      \\\\/_/
+
+
+  $ plz <command> [options]
+
+Toolkit for generating, building & testing packages.
+
+Commands:
+  create <name> [root-path]  Generates a package called \`@rexlabs/<name>\`.
+  test [options]             Starts a test runner in current directory.
+  stories                    Starts a storybook for UI components.
+  build                      Bundles a package for distribution.
+  serve                      Starts a demo for UI components.
+  clean                      Removes previous build files.
+  help                       Shows this help message.
+
+Help:
+  --help, -h     Show help                                             [boolean]
+  --help-nwb     Show help for nwb                                     [boolean]
+  --help-jest    Show help for jest                                    [boolean]
+  --version, -v  Show cli version number                               [boolean]
+
+Run \`plz help <command>\` for more information on specific commands.
+
+"
+`;
+
+exports[`cli should show usage details 3`] = `
+"stderrDump:
+"
+`;
+
+exports[`cli should show usage details for build 1`] = `"cmd: <CLI_DIR>/index.js help,build {}"`;
+
+exports[`cli should show usage details for build 2`] = `
+"stdoutDump:
+
+  $ plz build
+
+Bundles a package for distribution.
+
+Uses nwb to build two kinds of modules for distribution: cjs and es.
+
+Help:
+  --help, -h     Show help                                             [boolean]
+  --help-nwb     Show help for nwb                                     [boolean]
+  --help-jest    Show help for jest                                    [boolean]
+  --version, -v  Show cli version number                               [boolean]
+
+"
+`;
+
+exports[`cli should show usage details for build 3`] = `
+"stderrDump:
+"
+`;
+
+exports[`cli should show usage details for clean 1`] = `"cmd: <CLI_DIR>/index.js help,clean {}"`;
+
+exports[`cli should show usage details for clean 2`] = `
+"stdoutDump:
+
+  $ plz clean
+
+Removes previous build files.
+
+Help:
+  --help, -h     Show help                                             [boolean]
+  --help-nwb     Show help for nwb                                     [boolean]
+  --help-jest    Show help for jest                                    [boolean]
+  --version, -v  Show cli version number                               [boolean]
+
+"
+`;
+
+exports[`cli should show usage details for clean 3`] = `
+"stderrDump:
+"
+`;
+
+exports[`cli should show usage details for create 1`] = `"cmd: <CLI_DIR>/index.js help,create {}"`;
+
+exports[`cli should show usage details for create 2`] = `
+"stdoutDump:
+
+  $ plz create <name> [root-path]
+
+Generates a package called \`@rexlabs/<name>\`.
+
+The following package 'types' are available:
+
+  ◦ module
+  ◦ react-app
+  ◦ react-component
+
+Package templates use handlebars to generate directories and files.
+
+Help:
+  --help, -h     Show help                                             [boolean]
+  --help-nwb     Show help for nwb                                     [boolean]
+  --help-jest    Show help for jest                                    [boolean]
+  --version, -v  Show cli version number                               [boolean]
+
+Options:
+  --type       Type of Package                      [default: \\"react-component\\"]
+  --root-path  Root path                   [string] [default: Current directory]
+
+"
+`;
+
+exports[`cli should show usage details for create 3`] = `
+"stderrDump:
+"
+`;
+
+exports[`cli should show usage details for serve 1`] = `"cmd: <CLI_DIR>/index.js help,serve {}"`;
+
+exports[`cli should show usage details for serve 2`] = `
+"stdoutDump:
+
+  $ plz serve
+
+Starts a demo for UI components.
+
+Uses nwb to start a webpack server with Hot Module Replacement.
+
+Help:
+  --help, -h     Show help                                             [boolean]
+  --help-nwb     Show help for nwb                                     [boolean]
+  --help-jest    Show help for jest                                    [boolean]
+  --version, -v  Show cli version number                               [boolean]
+
+"
+`;
+
+exports[`cli should show usage details for serve 3`] = `
+"stderrDump:
+"
+`;
+
+exports[`cli should show usage details for test 1`] = `"cmd: <CLI_DIR>/index.js help,test {}"`;
+
+exports[`cli should show usage details for test 2`] = `
+"stdoutDump:
+
+  $ plz test [options]
+
+Starts a test runner in current directory.
+
+Jest is used to run tests and perform assertions. All args are passed to jest.
+See https://facebook.github.io/jest/docs/en/api.html for more details.
+
+Help:
+  --help, -h     Show help                                             [boolean]
+  --help-nwb     Show help for nwb                                     [boolean]
+  --help-jest    Show help for jest                                    [boolean]
+  --version, -v  Show cli version number                               [boolean]
+
+Options:
+  --watch  Rerun tests when files change.             [boolean] [default: false]
+
+"
+`;
+
+exports[`cli should show usage details for test 3`] = `
+"stderrDump:
+"
+`;
