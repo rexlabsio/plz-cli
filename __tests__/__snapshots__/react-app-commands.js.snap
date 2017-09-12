@@ -23,9 +23,13 @@ exports[`react-app should build project 3`] = `
 exports[`react-app should build project 4`] = `
 Array [
   "app.e42b9a1c.js",
+  "app.e42b9a1c.js.map",
   "index.html",
   "manifest.d41d8cd9.js",
-  "vendor.e2e4a9fd.js",
+  "manifest.d41d8cd9.js.map",
+  "stats.json",
+  "vendor.2c7c4c9c.js",
+  "vendor.2c7c4c9c.js.map",
 ]
 `;
 
@@ -88,6 +92,42 @@ exports[`react-app should install deps in project 2`] = `
 
 exports[`react-app should install deps in project 3`] = `
 "stderrDump:
+warning babel-plugin-inferno@1.7.0: All versions before 3.x are deprecated!
+warning babel-preset-es2016@6.22.0: We're really excited that you're trying to use ES2016 syntax, but instead of making more yearly presets, Babel has a better preset that we recommend you use instead: npm install babel-preset-env --save-dev. Give us a follow @babeljs to get more updates
+warning \\"glob-loader@0.3.0\\" has incorrect peer dependency \\"glob@*\\".
+warning \\"html-webpack-plugin@2.30.1\\" has incorrect peer dependency \\"webpack@1 || ^2 || ^2.1.0-beta || ^2.2.0-rc || ^3\\".
+warning \\"html-webpack-plugin@2.28.0\\" has incorrect peer dependency \\"webpack@1 || ^2 || ^2.1.0-beta || ^2.2.0-rc\\".
+warning \\"@storybook/addon-storyshots@3.2.8\\" has incorrect peer dependency \\"@storybook/addons@^3.2.6\\".
+warning \\"@storybook/addon-storyshots@3.2.8\\" has incorrect peer dependency \\"@storybook/channels@^3.2.0\\".
+warning \\"@storybook/addon-storyshots@3.2.8\\" has incorrect peer dependency \\"@storybook/react@^3.2.8\\".
+warning \\"@storybook/addon-storyshots@3.2.8\\" has incorrect peer dependency \\"babel-core@^6.25.0\\".
+warning \\"@storybook/addon-storyshots@3.2.8\\" has incorrect peer dependency \\"react-test-renderer@*\\".
+warning \\"stats-webpack-plugin@0.6.1\\" has incorrect peer dependency \\"webpack@^1.0||^2.1.0-beta||^2.2.0-rc\\".
+warning \\"storybook-readme@3.0.6\\" has incorrect peer dependency \\"@storybook/addons@^3.0.0-alpha.0\\".
+warning \\"babel-loader@7.1.2\\" has incorrect peer dependency \\"babel-core@6 || 7 || ^7.0.0-alpha || ^7.0.0-beta || ^7.0.0-rc\\".
+warning \\"babel-loader@7.1.2\\" has incorrect peer dependency \\"webpack@2 || 3\\".
+warning \\"babel-loader@6.2.10\\" has incorrect peer dependency \\"babel-core@^6.0.0\\".
+warning \\"babel-loader@6.2.10\\" has incorrect peer dependency \\"webpack@1 || 2 || ^2.1.0-beta || ^2.2.0-rc\\".
+warning \\"babel-preset-react-app@3.0.2\\" has incorrect peer dependency \\"babel-runtime@^6.23.0\\".
+warning \\"glamorous@4.8.0\\" has incorrect peer dependency \\"glamor@>=2\\".
+warning \\"url-loader@0.5.9\\" has incorrect peer dependency \\"file-loader@*\\".
+warning \\"url-loader@0.5.7\\" has incorrect peer dependency \\"file-loader@*\\".
+warning \\"webpack-dev-middleware@1.12.0\\" has incorrect peer dependency \\"webpack@^1.0.0 || ^2.0.0 || ^3.0.0\\".
+warning \\"webpack-dev-middleware@1.9.0\\" has incorrect peer dependency \\"webpack@1 || ^2.1.0-beta || ^2.2.0-rc.0\\".
+warning \\"karma-mocha-reporter@2.2.2\\" has incorrect peer dependency \\"karma@>=0.13\\".
+warning \\"karma-phantomjs-launcher@1.0.2\\" has incorrect peer dependency \\"karma@>=0.9\\".
+warning \\"karma-webpack@2.0.1\\" has incorrect peer dependency \\"webpack@^1.1.0 || ^2 || ^2.1.0-beta.0 || ^2.2.0-rc.0\\".
+warning \\"npm-install-webpack2-plugin@4.1.0\\" has incorrect peer dependency \\"webpack@^1.12.0 || ^2.1.0-beta.0 || ^2.1.0\\".
+warning \\"extract-text-webpack-plugin@2.1.0\\" has incorrect peer dependency \\"webpack@^2.2.0\\".
+warning \\"ajv-keywords@2.1.0\\" has incorrect peer dependency \\"ajv@>=5.0.0\\".
+warning \\"ajv-keywords@1.5.1\\" has incorrect peer dependency \\"ajv@>=4.10.0\\".
+warning \\"uglifyjs-webpack-plugin@0.4.6\\" has incorrect peer dependency \\"webpack@^1.9 || ^2 || ^2.1.0-beta || ^2.2.0-rc || ^3.0.0\\".
+warning \\"eslint-config-semistandard@11.0.0\\" has incorrect peer dependency \\"eslint-config-standard@^10.0.0\\".
+warning \\"eslint-config-standard@10.2.1\\" has incorrect peer dependency \\"eslint-plugin-import@>=2.2.0\\".
+warning \\"eslint-config-standard@10.2.1\\" has incorrect peer dependency \\"eslint-plugin-node@>=4.2.2\\".
+warning \\"eslint-config-standard@10.2.1\\" has incorrect peer dependency \\"eslint-plugin-promise@>=3.5.0\\".
+warning \\"eslint-config-standard@10.2.1\\" has incorrect peer dependency \\"eslint-plugin-standard@>=3.0.0\\".
+warning \\"typescript-eslint-parser@7.0.0\\" has incorrect peer dependency \\"typescript@*\\".
 warning Ignored scripts due to flag.
 "
 `;
@@ -158,15 +198,16 @@ loader option has been deprecated - replace with \\"use\\"
       at Object.<anonymous> (node_modules/babel-runtime/core-js/object/define-property.js:1:133)
       at Object.<anonymous> (node_modules/core-js/library/modules/_object-dp.js:1:125)
       at Object.<anonymous> (node_modules/core-js/library/modules/_hide.js:1:112)
-      at Object.<anonymous> (node_modules/core-js/library/modules/_export.js:4:8)
-      at Object.<anonymous> (node_modules/core-js/library/modules/_iter-define.js:3:11)
+      at Object.<anonymous> (node_modules/core-js/library/modules/_export.js:4:12)
+      at Object.<anonymous> (node_modules/core-js/library/modules/_iter-define.js:3:15)
       at Object.<anonymous> (node_modules/core-js/library/modules/es6.string.iterator.js:5:1)
       at Object.<anonymous> (node_modules/core-js/library/fn/promise.js:2:1)
       at Object.<anonymous> (node_modules/babel-runtime/core-js/promise.js:1:133)
       at Object.<anonymous> (src/utils/globals.js:1:118)
       at Object.<anonymous> (src/index.js:13:1)
       at Object.<anonymous> (src/__tests__/test-react-app.js:1:111)
-      at process._tickCallback (internal/process/next_tick.js:109:7)
+          at <anonymous>
+      at process._tickCallback (internal/process/next_tick.js:188:7)
 
 Test Suites: 1 failed, 1 total
 Tests:       0 total

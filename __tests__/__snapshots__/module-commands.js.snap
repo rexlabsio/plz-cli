@@ -80,6 +80,67 @@ exports[`module (node) should install deps in project 2`] = `
 
 exports[`module (node) should install deps in project 3`] = `
 "stderrDump:
+warning babel-plugin-inferno@1.7.0: All versions before 3.x are deprecated!
+warning babel-preset-es2016@6.22.0: We're really excited that you're trying to use ES2016 syntax, but instead of making more yearly presets, Babel has a better preset that we recommend you use instead: npm install babel-preset-env --save-dev. Give us a follow @babeljs to get more updates
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+warning \\"glob-loader@0.3.0\\" has incorrect peer dependency \\"glob@*\\".
+warning \\"html-webpack-plugin@2.30.1\\" has incorrect peer dependency \\"webpack@1 || ^2 || ^2.1.0-beta || ^2.2.0-rc || ^3\\".
+warning \\"html-webpack-plugin@2.28.0\\" has incorrect peer dependency \\"webpack@1 || ^2 || ^2.1.0-beta || ^2.2.0-rc\\".
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+warning \\"storybook-readme@3.0.6\\" has incorrect peer dependency \\"@storybook/addons@^3.0.0-alpha.0\\".
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+warning \\"stats-webpack-plugin@0.6.1\\" has incorrect peer dependency \\"webpack@^1.0||^2.1.0-beta||^2.2.0-rc\\".
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+warning \\"@storybook/addon-storyshots@3.2.8\\" has incorrect peer dependency \\"@storybook/addons@^3.2.6\\".
+warning \\"@storybook/addon-storyshots@3.2.8\\" has incorrect peer dependency \\"@storybook/channels@^3.2.0\\".
+warning \\"@storybook/addon-storyshots@3.2.8\\" has incorrect peer dependency \\"@storybook/react@^3.2.8\\".
+warning \\"@storybook/addon-storyshots@3.2.8\\" has incorrect peer dependency \\"babel-core@^6.25.0\\".
+<UNMET PEER DEP WARNING>
+warning \\"@storybook/addon-storyshots@3.2.8\\" has incorrect peer dependency \\"react-test-renderer@*\\".
+warning \\"babel-loader@7.1.2\\" has incorrect peer dependency \\"babel-core@6 || 7 || ^7.0.0-alpha || ^7.0.0-beta || ^7.0.0-rc\\".
+warning \\"babel-loader@7.1.2\\" has incorrect peer dependency \\"webpack@2 || 3\\".
+warning \\"babel-loader@6.2.10\\" has incorrect peer dependency \\"babel-core@^6.0.0\\".
+warning \\"babel-loader@6.2.10\\" has incorrect peer dependency \\"webpack@1 || 2 || ^2.1.0-beta || ^2.2.0-rc\\".
+warning \\"babel-preset-react-app@3.0.2\\" has incorrect peer dependency \\"babel-runtime@^6.23.0\\".
+warning \\"glamorous@4.8.0\\" has incorrect peer dependency \\"glamor@>=2\\".
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+warning \\"url-loader@0.5.9\\" has incorrect peer dependency \\"file-loader@*\\".
+warning \\"url-loader@0.5.7\\" has incorrect peer dependency \\"file-loader@*\\".
+warning \\"webpack-dev-middleware@1.12.0\\" has incorrect peer dependency \\"webpack@^1.0.0 || ^2.0.0 || ^3.0.0\\".
+warning \\"webpack-dev-middleware@1.9.0\\" has incorrect peer dependency \\"webpack@1 || ^2.1.0-beta || ^2.2.0-rc.0\\".
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+warning \\"karma-mocha-reporter@2.2.2\\" has incorrect peer dependency \\"karma@>=0.13\\".
+warning \\"karma-phantomjs-launcher@1.0.2\\" has incorrect peer dependency \\"karma@>=0.9\\".
+warning \\"karma-webpack@2.0.1\\" has incorrect peer dependency \\"webpack@^1.1.0 || ^2 || ^2.1.0-beta.0 || ^2.2.0-rc.0\\".
+warning \\"extract-text-webpack-plugin@2.1.0\\" has incorrect peer dependency \\"webpack@^2.2.0\\".
+warning \\"npm-install-webpack2-plugin@4.1.0\\" has incorrect peer dependency \\"webpack@^1.12.0 || ^2.1.0-beta.0 || ^2.1.0\\".
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+warning \\"react-datetime@2.10.1\\" has incorrect peer dependency \\"moment@>=2.16.0\\".
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+<UNMET PEER DEP WARNING>
+warning \\"ajv-keywords@2.1.0\\" has incorrect peer dependency \\"ajv@>=5.0.0\\".
+warning \\"ajv-keywords@1.5.1\\" has incorrect peer dependency \\"ajv@>=4.10.0\\".
+warning \\"uglifyjs-webpack-plugin@0.4.6\\" has incorrect peer dependency \\"webpack@^1.9 || ^2 || ^2.1.0-beta || ^2.2.0-rc || ^3.0.0\\".
 <UNMET PEER DEP WARNING>
 <UNMET PEER DEP WARNING>
 <UNMET PEER DEP WARNING>
@@ -90,24 +151,7 @@ exports[`module (node) should install deps in project 3`] = `
 <UNMET PEER DEP WARNING>
 <UNMET PEER DEP WARNING>
 <UNMET PEER DEP WARNING>
-<UNMET PEER DEP WARNING>
-<UNMET PEER DEP WARNING>
-<UNMET PEER DEP WARNING>
-<UNMET PEER DEP WARNING>
-<UNMET PEER DEP WARNING>
-<UNMET PEER DEP WARNING>
-<UNMET PEER DEP WARNING>
-<UNMET PEER DEP WARNING>
-<UNMET PEER DEP WARNING>
-<UNMET PEER DEP WARNING>
-<UNMET PEER DEP WARNING>
-<UNMET PEER DEP WARNING>
-<UNMET PEER DEP WARNING>
-<UNMET PEER DEP WARNING>
-<UNMET PEER DEP WARNING>
-<UNMET PEER DEP WARNING>
-<UNMET PEER DEP WARNING>
-<UNMET PEER DEP WARNING>
+warning \\"react-icon-base@2.0.7\\" has incorrect peer dependency \\"prop-types@*\\".
 <UNMET PEER DEP WARNING>
 <UNMET PEER DEP WARNING>
 <UNMET PEER DEP WARNING>
@@ -181,7 +225,7 @@ loader option has been deprecated - replace with \\"use\\"
 Test Suites: 1 passed, 1 total
 Tests:       1 passed, 1 total
 Snapshots:   0 total
-Time:        <TIMESTAMP>, estimated <TIMESTAMP>
+Time:        <TIMESTAMP>
 Ran all test suites.
 "
 `;
