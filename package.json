@@ -19,7 +19,8 @@
     "test:watch": "jest --watch -u --testPathPattern \"$(pwd)/__tests__\""
   },
   "author": "Rex Software <lochlan.bunn@rexsoftware.com.au>",
-  "repository": "git@bitbucket.org:rexsoftware/heidi.git",
+  "repository": "git@bitbucket.org:rexsoftware/vivid.git",
+  "homepage": "https://bitbucket.org/rexsoftware/vivid",
   "license": "UNLICENSED",
   "dependencies": {
     "@storybook/addon-actions": "^3.2.0",
