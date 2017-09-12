@@ -43,9 +43,11 @@ const READMES_PATTERN_PATH = u.to(
   __dirname,
   '../configs/storybook/readmes.pattern'
 );
-const MONOREPO_STORIES_GLOB_PATTERN = `${process.cwd()}/packages/*/src/.stories.js`;
+const MONOREPO_STORIES_GLOB_PATTERN = dir =>
+  `${process.cwd()}/${dir}/*/src/.stories.js`;
 const PACKAGE_STORIES_GLOB_PATTERN = `${process.cwd()}/src/.stories.js`;
-const MONOREPO_READMES_GLOB_PATTERN = `${process.cwd()}/packages/*/readme.md`;
+const MONOREPO_READMES_GLOB_PATTERN = dir =>
+  `${process.cwd()}/${dir}/*/readme.md`;
 const PACKAGE_READMES_GLOB_PATTERN = `${process.cwd()}/readme.md`;
 
 u.debug('storybook args:\n', STORYBOOK_ARGS);
@@ -60,26 +62,27 @@ async function checkStorybookExists () {
   });
 }
 
-async function isMonoRepoRoot () {
-  return await fs.exists(`${process.cwd()}/packages`);
+async function isMonoRepoRoot (rootPath) {
+  return await fs.exists(`${process.cwd()}/${rootPath}`);
 }
 
-async function getStoriesGlobForCurrentDir () {
-  return (await isMonoRepoRoot())
-    ? MONOREPO_STORIES_GLOB_PATTERN
+async function getStoriesGlobForCurrentDir (rootPath) {
+  return (await isMonoRepoRoot(rootPath))
+    ? MONOREPO_STORIES_GLOB_PATTERN(rootPath)
     : PACKAGE_STORIES_GLOB_PATTERN;
 }
 
-async function getReadmesGlobForCurrentDir () {
-  return (await isMonoRepoRoot())
-    ? MONOREPO_READMES_GLOB_PATTERN
+async function getReadmesGlobForCurrentDir (rootPath) {
+  return (await isMonoRepoRoot(rootPath))
+    ? MONOREPO_READMES_GLOB_PATTERN(rootPath)
     : PACKAGE_READMES_GLOB_PATTERN;
 }
 
-const PKG_HIGHLIGHT_RGX = /packages\/([\w-_]+)(.*)/gi;
-async function writePatternFile () {
-  const storiesGlobPattern = await getStoriesGlobForCurrentDir();
-  const readmesGlobPattern = await getReadmesGlobForCurrentDir();
+const PKG_HIGHLIGHT_RGX = rootPath =>
+  new RegExp(`${rootPath}\\/([\\w-_]+)(.*)`, 'gi');
+async function writePatternFile (rootPath) {
+  const storiesGlobPattern = await getStoriesGlobForCurrentDir(rootPath);
+  const readmesGlobPattern = await getReadmesGlobForCurrentDir(rootPath);
   u.debug('storiesGlobPattern:     ', storiesGlobPattern);
   u.debug('readmesGlobPattern:     ', readmesGlobPattern);
   await fs.writeFile(STORIES_PATTERN_PATH, storiesGlobPattern);
@@ -87,36 +90,38 @@ async function writePatternFile () {
   return storiesGlobPattern;
 }
 
-async function checkStoriesExists (storiesGlobPattern) {
+async function checkStoriesExists (rootPath, storiesGlobPattern) {
   const storyPaths = await glob(storiesGlobPattern);
+  const storiesRootPath = `${rootPath}/`;
   if (storyPaths.length > 0) {
     const formatedPaths = storyPaths
       .map(p => path.relative(process.cwd(), p))
       .map(p => {
-        return p.includes('packages/')
+        return p.includes(storiesRootPath)
           ? p.replace(
-              PKG_HIGHLIGHT_RGX,
-              `${u.muted('packages/')}$1${u.muted('$2')}`
-            )
+            PKG_HIGHLIGHT_RGX(rootPath),
+            `${u.muted(storiesRootPath)}$1${u.muted('$2')}`
+          )
           : u.muted(p);
       });
     const storyText = formatedPaths.length > 1 ? 'stories' : 'story';
     console.log(` Loading ${storyText}:\n\n  ${formatedPaths.join('\n  ')}\n`);
   } else {
+    const errLine = chalk.bold('Error: Could not find any stories.');
+    const warnLine = 'Stories need to match one of the following patterns:';
+    const otherLines = p => u.muted(path.relative(process.cwd(), p));
     console.error(
-      ` ${chalk.bold('Error: Could not find any stories.')}\n\n ${u.warn(
-        `Stories need to match the following path pattern:\n  ${u.underline.white(
-          '"' + (await getStoriesGlobForCurrentDir()) + '"'
-        )}`
-      )}`
+      ` ${errLine}\n\n ${warnLine}\n\n  ${otherLines(
+        PACKAGE_STORIES_GLOB_PATTERN
+      )}\n  ${otherLines(MONOREPO_STORIES_GLOB_PATTERN(rootPath))}`
     );
     process.exit(1);
   }
 }
 
-async function runStorybook () {
+async function runStorybook ({ rootPath }) {
   await checkStorybookExists();
-  await checkStoriesExists(await writePatternFile());
+  await checkStoriesExists(rootPath, await writePatternFile(rootPath));
 
   const port = await detectPort(u.DEFAULT_PORT);
   const args = STORYBOOK_ARGS.concat(['--port', port]).join(' ');
@@ -128,6 +133,6 @@ async function runStorybook () {
   });
 }
 
-module.exports = () => {
-  runStorybook().catch(u.unhandledError);
+module.exports = argv => {
+  runStorybook(argv).catch(u.unhandledError);
 };

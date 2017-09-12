@@ -82,6 +82,12 @@ function loadCliCommands () {
     yargs,
     'stories',
     'Starts a storybook for UI components.',
+    yarns =>
+      yargs.options('root-path', {
+        type: 'string',
+        default: 'components',
+        describe: 'Directory to search in, for multiple package stories.'
+      }),
     'Storybook is an interactive development & testing environment for React ' +
       'Components. Its \'stories\' are also used for snapshot testing.'
   );
