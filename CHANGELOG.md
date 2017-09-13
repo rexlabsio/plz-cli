@@ -1,7 +1,23 @@
 # Change Log
 
 All notable changes to this project will be documented in this file.
-See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+<a name="1.30.0"></a>
+# 1.30.0 (2017-09-13)
+
+
+### Bug Fixes
+
+* Amend script hooks ([62767bc](https://bitbucket.org/rexsoftware/vivid/commits/62767bc))
+
+
+### Features
+
+* **plz-cli:** Add `--root-path` option to `stories` subcommand ([73176c5](https://bitbucket.org/rexsoftware/vivid/commits/73176c5))
+
+
+
 
 <a name="1.27.0"></a>
 # [1.27.0](https://bitbucket.org/rexsoftware/heidi/compare/@rexlabs/plz-cli@1.9.0...@rexlabs/plz-cli@1.27.0) (2017-09-06)
