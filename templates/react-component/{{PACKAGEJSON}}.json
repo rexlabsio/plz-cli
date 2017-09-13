@@ -18,7 +18,7 @@
     "start": "plz stories",
     "test": "plz test",
     "test:watch": "plz test --watch",
-    "prepack": "npm run build"
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@rexlabs/styling": "{{STYLING_JS_VERSION}}",
