@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.31.0"></a>
+# 1.31.0 (2017-09-22)
+
+
+### Bug Fixes
+
+* Amend script hooks ([62767bc](https://bitbucket.org/rexsoftware/vivid/commits/62767bc))
+
+
+### Features
+
+* **plz-cli:** Add `--root-path` option to `stories` subcommand ([73176c5](https://bitbucket.org/rexsoftware/vivid/commits/73176c5))
+* **plz-cli:** Update the react-app template ([7d11b6c](https://bitbucket.org/rexsoftware/vivid/commits/7d11b6c))
+
+
+
+
 <a name="1.30.0"></a>
 # 1.30.0 (2017-09-13)
 
