@@ -2,6 +2,10 @@
 |-------------------------------------------------------------------------------
 | Global Util Setup
 |-------------------------------------------------------------------------------
+|
+| - Log app configuration at start
+| - Setup Promises with better DX, using blubird
+|
 */
 
 import config from 'src/config';
@@ -14,9 +18,10 @@ if (!global) {
 
 if (global) {
   // hack to work in node
-  global.__DEV__ = typeof global.__DEV__ !== 'undefined'
-    ? global.__DEV__
-    : process.env.NODE_ENV !== 'production';
+  global.__DEV__ =
+    typeof global.__DEV__ !== 'undefined'
+      ? global.__DEV__
+      : process.env.NODE_ENV !== 'production';
 }
 
 if (__DEV__) {
@@ -25,7 +30,9 @@ if (__DEV__) {
 Development Environment:
 
   __DEV__ = true
-${Object.keys(config).map(key => `  ${key} = ${config[key]}`).join('\n')}
+${Object.keys(config)
+    .map(key => `  ${key} = ${config[key]}`)
+    .join('\n')}
 `.trim()
   );
 }

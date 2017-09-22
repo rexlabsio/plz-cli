@@ -5,15 +5,22 @@
 |
 | Responsible for handling the loading and parsing of CLI commands.
 |
+| Note:
+|  Modules are required inside the functions to avoid running them until
+|  cli commands are being reached.
+|
 */
 
-const path = require('path');
-const nwb = require('./libs/nwb-manager');
-const jest = require('./libs/jest-manager');
-const u = require('./libs/util');
-const org = u.pkg.name.split('/')[0];
-
 function loadCliCommands () {
+  /* Quick print version. Note: Avoids loading config, which can add ~500ms */
+  if (process.argv.includes('--version') || process.argv.includes('-v')) {
+    console.log(require('../package').version);
+    process.exit(0);
+  }
+
+  /* Load modules when we hit the hot code. */
+  const chalk = require('chalk');
+  const u = require('./libs/util');
   u.loadYargsColors();
   /** @type yargs.Argv */
   const yargs = require('yargs');
@@ -37,10 +44,15 @@ function loadCliCommands () {
   */
   const templates = ['module', 'react-app', 'react-component'];
   const defaultTempalate = 'react-component';
+  const templateList = templates
+    .map(template => `${u.dotpoint(u.underline(template))}`)
+    .join('\n');
   u.registerCommand(
     yargs,
     { command: 'create <name> [root-path]', file: 'create' },
-    `Generates a package called ${u.bold(`\`${org}/<name>\``)}.`,
+    `Generates a package/app called ${u.bold('`')}${u.muted(
+      `${u.pkg.name.split('/')[0]}/`
+    )}${u.bold('<name>')}${u.bold('`')}.`,
     yargs =>
       yargs
         .options({
@@ -55,11 +67,24 @@ function loadCliCommands () {
             defaultDescription: 'Current directory'
           }
         })
-        .check((argv, parsed) => templates.includes(argv.type)),
+        .check(function (argv) {
+          if (templates.includes(argv.type)) {
+            return true;
+          } else {
+            throw new Error(
+              u.wrapLinesInError(
+                'Usage Error',
+                `${chalk.red(
+                  `The type give to \`${u.muted.white(
+                    `--type=${argv.type}`
+                  )}\` was invalid.`
+                )}\n\nUse one of the following:\n\n${templateList}`
+              )
+            );
+          }
+        }),
     'The following package \'types\' are available:\n\n' +
-      templates
-        .map(template => `${u.dotpoint(u.underline(template))}`)
-        .join('\n') +
+      templateList +
       '\n\n' +
       'Package templates use handlebars to generate directories and files.'
   );
@@ -140,6 +165,10 @@ function hasHitImplicitCommand (cli, cmd) {
 }
 
 function parseCommand (cli) {
+  /* Load modules when we hit the hot code. */
+  const u = require('./libs/util');
+  const nwb = require('./libs/nwb-manager');
+
   if (hasHitImplicitCommand(cli, 'help-nwb')) {
     u.debug('hit help-nwb');
     nwb.showHelp().then(() => {
@@ -149,6 +178,7 @@ function parseCommand (cli) {
   }
   if (hasHitImplicitCommand(cli, 'help-jest')) {
     u.debug('hit help-jest');
+    const jest = require('./libs/jest-manager');
     jest.showHelp().then(() => {
       process.exit(1);
     });

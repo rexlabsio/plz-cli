@@ -67,8 +67,6 @@ function spinner (optionsOrText) {
  * @param {String} pathToFile - Path to the file.
  */
 async function accessFile (pathToFile, fsMode = fs.R_OK) {
-  const name = path.basename(pathToFile);
-  const dir = path.dirname(pathToFile);
   return fs.access(pathToFile, fsMode);
 }
 
@@ -79,7 +77,7 @@ async function accessFile (pathToFile, fsMode = fs.R_OK) {
 async function accessBin (pathToBin) {
   const name = path.basename(pathToBin);
   const dir = path.dirname(pathToBin);
-  return accessFile(pathToBin, fs.X_OK).catch(err => {
+  return accessFile(pathToBin, fs.X_OK).catch(() => {
     console.log();
     console.error(
       `${chalk.bold(
@@ -125,6 +123,17 @@ function nwbConfigPath () {
 const DEFAULT_EXEC_SPAWN_OPTIONS = {
   cwd: process.cwd()
 };
+
+function wrapLinesInError (header, lines) {
+  const maxLength = lines
+    .split('\n')
+    .reduce((max, line) => (line.length > max ? line.length : max), 0);
+  let head = `  ${header.toUpperCase()}  `;
+  const top = muted(error('–'.repeat(maxLength - head.length)));
+  const bottom = muted(error('–'.repeat(maxLength)));
+  head = chalk.bold.bgRed.white(head);
+  return `\n${head}${top}\n\n${lines.trim()}\n\n${bottom}\n`;
+}
 
 function exec (
   command,
@@ -183,17 +192,7 @@ function exec (
       }
       unhandledError(err);
       if (spinnerText) {
-        const maxLength = outdump
-          .split('\n')
-          .reduce((max, line) => (line.length > max ? line.length : max), 0);
-        const head = '  ERROR DETAILS  ';
-        const top = muted(error('–'.repeat(maxLength - head.length)));
-        const bottom = muted(error('–'.repeat(maxLength)));
-        console.log(
-          `\n${chalk.bold.bgRed.white(
-            head
-          )}${top}\n\n${outdump.trim()}\n\n${bottom}\n`
-        );
+        console.log(wrapLinesInError('Error Details', outdump));
       }
       process.exit(1);
     };
@@ -226,10 +225,7 @@ function execGetOutput (command, execOptions = {}) {
 
   debug('exec command:     ', command);
   debug('exec options: \n', execOptions);
-  return _exec(command, execOptions).catch(err => {
-    unhandledError(err);
-    process.exit(1);
-  });
+  return _exec(command, execOptions);
 }
 
 function unhandledError (err) {
@@ -242,7 +238,7 @@ function escapeStringForShell (str) {
 }
 
 async function getWriteError (dir) {
-  return fs.access(path.join(dir, '../'), fs.W_OK).catch(err => false);
+  return fs.access(path.join(dir, '../'), fs.W_OK).catch(() => false);
 }
 
 function trimLeft (str) {
@@ -275,8 +271,8 @@ function get$0 () {
 const $0 = get$0(process.argv);
 
 const cmdRegex = /^([\s\w-]+)?/;
-const reqRegex = /<([a-zA-Z\-]+)>/;
-const optRegex = /\[([a-zA-Z\-]+)]/;
+const reqRegex = /<([a-zA-Z-]+)>/;
+const optRegex = /\[([a-zA-Z-]+)]/;
 
 function decorateCmd (str) {
   return str
@@ -321,8 +317,8 @@ function registerCommand (yargs, cmdConf, desc, builder, descMore) {
   function commandHandler (argv) {
     debug(`running command '${cmdAndArgs}'`);
     const hit = argv._[0];
-    const txt = `plz ${hit}`.split('').join(' ');
-    console.log(muted(`\n -:  ${chalk.magenta(txt)}  :-\n`));
+    const txt = `plz ${hit}`;
+    console.log(muted(`${txt} v${pkg.version}\n`));
 
     // NOTE: Require the commands dynamically to dramatically improve bootup perf.
     require('../commands/' + cmdFileName)(argv);
@@ -418,6 +414,7 @@ module.exports = {
   req,
   opt,
   dotpoint,
+  wrapLinesInError,
   decorateCmd,
   decorateCliCmd,
   prefixTerm,

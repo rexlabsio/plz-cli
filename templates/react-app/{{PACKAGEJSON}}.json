@@ -5,6 +5,7 @@
   "version": "0.0.0",
   "description": "{{TITLE_NAME}}",
   "files": [
+    "public",
     "package.json",
     "readme.md"
   ],
@@ -23,8 +24,12 @@
     "precommit": "lint-staged"
   },
   "dependencies": {
-    "@rexlabs/api-client": "{{API_CLIENT_JS_VERSION}}",
-    "@rexlabs/styling": "{{STYLING_JS_VERSION}}",
+    "@rexlabs/api-client": "{{PKG_VER.API_CLIENT}}",
+    "@rexlabs/box": "{{PKG_VER.BOX}}",
+    "@rexlabs/form": "{{PKG_VER.FORM}}",
+    "@rexlabs/styling": "{{PKG_VER.STYLING}}",
+    "@rexlabs/text": "{{PKG_VER.TEXT}}",
+    "@rexlabs/model-generator": "{{PKG_VER.MODEL_GENERATOR}}",
     "bluebird": "^3.5.0",
     "invariant": "^2.2.2",
     "lodash": "^4.17.4",
@@ -34,6 +39,7 @@
     "react-dom": "{{REACT_VERSION}}",
     "react-redux": "^5.0.4",
     "redux": "^3.6.0",
+    "redux-batched-subscribe": "^0.1.6",
     "redux-persist": "^4.8.0",
     "redux-thunk": "^2.2.0",
     "warning": "^3.0.0"
@@ -46,11 +52,10 @@
     "lint-staged": "^4.0.1",
     "prettier-eslint-cli": "^4.1.1",
     "redux-devtools-extension": "^2.13.0",
-    "redux-logger": "^3.0.1",
     "remote-redux-devtools": "^0.5.7",
     "webpack-bundle-analyzer": "^2.8.2"
   },
-  "author": "Rex Software",
+  "author": "Rex Software <devteam@rexsoftware.com.au>",
   "license": "UNLICENSED",
   "lint-staged": {
     "linters": {

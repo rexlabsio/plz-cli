@@ -1,3 +1,15 @@
+/*
+|-------------------------------------------------------------------------------
+| API Client
+|-------------------------------------------------------------------------------
+|
+| The singleton API client is created with @rexlabs/api-client. It includes:
+|  - Base URL sourced from the env config
+|  - Default headers for laravel servers
+|  - Middleware (interceptors) for common tasks
+|
+*/
+
 import _ from 'lodash';
 import { create } from '@rexlabs/api-client';
 import config from 'config';

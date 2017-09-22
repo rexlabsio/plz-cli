@@ -9,10 +9,9 @@
 */
 
 module.exports = {
-  LOG_REDUX: false,
   API_URL: 'http://127.0.0.1:8000/api/v1',
 
   dev: {
-    LOG_REDUX: true
+    // API_URL: 'http://localhost:8001/api/v1',
   }
 };

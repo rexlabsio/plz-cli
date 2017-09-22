@@ -10,18 +10,21 @@
 */
 
 const pify = require('pify');
-const fs = pify(require('fs'));
 const copyTemplateDir = pify(require('copy-template-dir'));
 const path = require('path');
-const chalk = require('chalk');
 const changeCase = require('change-case');
 const u = require('../libs/util');
 
 const TEMPLATE_PATH = u.to(__dirname, '../../templates/');
 const REACT_VERSION = '>=15.5.0 <16.0.0';
-const CORE_JS_VERSION = '1.x';
 const PLZ_CLI_VERSION = '1.x';
 const PLZ_CLI_NAME = u.pkg.name;
+const POST_CREATE_MESSAGES = {
+  'react-app': ({ relDir }) =>
+    `
+  ${u.underline('Geting started:')} \`cd ${relDir} && yarn && yarn start\`
+  `.trim()
+};
 
 const cleanBuffer = x => x.toString().trim();
 const fetchPkgVersion = (registry, pkgName) =>
@@ -32,38 +35,47 @@ const fetchPkgVersion = (registry, pkgName) =>
     })
   });
 async function scaffold (name, targetDir, type) {
-  const spinner = u.spinner('Fetching scaffold metadata').start();
+  const templateName = changeCase.titleCase(type);
+  const spinner = u
+    .spinner(
+      `Creating "${u.bold.magenta(name)}" ${u.muted(`(${templateName})`)}`
+    )
+    .start();
   // HACK: Avoid Yarn from overriding registry, which may screw up private pkg access.
   let registry = 'https://registry.npmjs.org/';
-  const fetchVersion = fetchPkgVersion.bind(null, registry);
+  const fetchVersion = async (name, backupVersion) => {
+    const version = await fetchPkgVersion(registry, name);
+    return version ? `^${cleanBuffer(version)}` : backupVersion;
+  };
 
   // First, we setup all the env vars for the template
-  let email = await u.execGetOutput('git config user.email', {
-    stdio: 'ignore'
-  });
-  let remoteUrl = await u.execGetOutput('git config remote.origin.url', {
-    stdio: 'ignore'
-  });
-  let username = await u.execGetOutput('git config user.name', {
-    stdio: 'ignore'
-  });
-  email = cleanBuffer(email);
-  remoteUrl = cleanBuffer(remoteUrl);
-  username = cleanBuffer(username);
-  let stylingJsVersion, apiClientJsVersion;
-  if (type === 'react-app' || type === 'react-component') {
-    let stylingJsVersion = await fetchVersion('@rexlabs/styling');
-    stylingJsVersion = stylingJsVersion
-      ? `^${cleanBuffer(stylingJsVersion)}`
-      : '1.x';
-  }
-  if (type === 'react-app') {
-    let apiClientJsVersion = await fetchVersion('@rexlabs/api-client');
-    apiClientJsVersion = apiClientJsVersion
-      ? `^${cleanBuffer(apiClientJsVersion)}`
-      : '2.x';
-  }
-  spinner.succeed('Fetched scaffold metadata');
+  const optIgnore = { stdio: 'ignore' };
+
+  const [
+    email,
+    username,
+    remoteUrl,
+    pkgVerStyling,
+    pkgVerApiClient,
+    pkgVerBox,
+    pkgVerText,
+    pkgVerForms,
+    pkgVerModelGenerator
+  ] = await Promise.all([
+    u.execGetOutput('git config user.email', optIgnore).then(cleanBuffer),
+    u.execGetOutput('git config user.name', optIgnore).then(cleanBuffer),
+    u
+      .execGetOutput('git config remote.origin.url', optIgnore)
+      .catch(() => 'FILL_IN_LATER')
+      .then(cleanBuffer),
+    fetchVersion('@rexlabs/styling', '1.x'),
+    fetchVersion('@rexlabs/api-client', '2.x'),
+    fetchVersion('@rexlabs/box', '1.x'),
+    fetchVersion('@rexlabs/text', '1.x'),
+    fetchVersion('@rexlabs/form', '1.x'),
+    fetchVersion('@rexlabs/model-generator', '1.x')
+  ]);
+
   const vars = {
     NAME: name,
     SLUGGED_NAME: changeCase.paramCase(name),
@@ -72,9 +84,12 @@ async function scaffold (name, targetDir, type) {
     PASCAL_NAME: changeCase.pascalCase(name),
     PACKAGEJSON: 'package', // Note: We avoid npm 'pack' rules during publish
     REACT_VERSION: REACT_VERSION,
-    CORE_JS_VERSION: CORE_JS_VERSION,
-    STYLING_JS_VERSION: stylingJsVersion,
-    API_CLIENT_JS_VERSION: stylingJsVersion,
+    'PKG_VER.STYLING': pkgVerStyling,
+    'PKG_VER.API_CLIENT': pkgVerApiClient,
+    'PKG_VER.BOX': pkgVerBox,
+    'PKG_VER.TEXT': pkgVerText,
+    'PKG_VER.FORMS': pkgVerForms,
+    'PKG_VER.MODEL_GENERATOR': pkgVerModelGenerator,
     CLI_NAME: PLZ_CLI_NAME,
     CLI_VERSION: PLZ_CLI_VERSION,
     HAS_AUTHOR_EMAIL: email ? ' ' : '',
@@ -88,19 +103,26 @@ async function scaffold (name, targetDir, type) {
   const templatePath = path.resolve(TEMPLATE_PATH, type);
   const err = await u.getWriteError(templatePath);
   if (err) {
+    spinner.stop();
+    spinner.clear();
     throw new Error(
       `Cannot access template \`${templatePath}\`:\n${err.message}`
     );
   } else {
-    const templateName = changeCase.titleCase(type);
     const relDir = path.relative(process.cwd(), targetDir);
-    const spinner = u
-      .spinner(`Generating '${u.italic(templateName)}': ${u.underline(relDir)}`)
-      .start();
     await copyTemplateDir(templatePath, targetDir, vars);
     spinner.succeed(
-      `Generated '${u.italic(templateName)}': ${u.underline(relDir)}`
+      `Created "${u.bold.magenta(relDir)}" ${u.muted(`(${templateName})`)}`
     );
+
+    if (type in POST_CREATE_MESSAGES) {
+      console.log(
+        '\n  ' +
+          POST_CREATE_MESSAGES[type]({ relDir })
+            .split('\n')
+            .join('\n  ')
+      );
+    }
   }
 }
 
@@ -127,6 +149,7 @@ async function runScaffoldCommand ({ name, rootPath = '', type }) {
       await scaffold(packageName, packageDir, type);
     } catch (err) {
       console.error(`${u.error(`Error creating ${packageName} package.`)}`);
+      console.log();
       console.error(err);
       process.exit(1);
     }

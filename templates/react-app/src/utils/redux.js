@@ -1,7 +1,18 @@
+/*
+|-------------------------------------------------------------------------------
+| Redux Utils
+|-------------------------------------------------------------------------------
+|
+| - Construct the store with DX Tools setup
+|   - Add thunk middleware
+|   - Add enhancements for redux devtools
+| - Middleware for adding deferred auth details to the API Client
+|
+*/
+
 import _ from 'lodash';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import { createLogger } from 'redux-logger';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { setAuthToken, setAccountId } from 'utils/api-client';
 
@@ -10,10 +21,10 @@ import { setAuthToken, setAccountId } from 'utils/api-client';
  */
 export const apiClientMiddleware = store => next => action => {
   const state = store.getState();
-  if (state.session.user) {
-    // TODO: Setup session model to receive API account/token details.
-    // setAccountId(_.get(state, 'session.accountId'));
-    // setAuthToken(_.get(state, 'session.apiToken'));
+  if (_.get(state, 'session.authToken')) {
+    // NOTE: These fields are also kept in the store's session model.
+    setAccountId(_.get(state, 'session.accountId'));
+    setAuthToken(_.get(state, 'session.apiToken'));
   }
   return next(action);
 };
@@ -33,17 +44,10 @@ function createEnhancer (...enhancers) {
  * Creates a stack of middleware.
  * Injects a logger when in DEV mode.
  * @param {Object} middlewares - a collection of middleware
- * @param {Boolean} isLogging - Whether to log to redux actions to console.
  * @returns {Function}
  */
-function createMiddlewareStack (middlewares, isLogging) {
+function createMiddlewareStack (middlewares) {
   let middlewareStack = [thunkMiddleware, ...middlewares];
-
-  if (isLogging) {
-    const logger = createLogger();
-    middlewareStack.push(logger);
-    console.log('Applied the Redux Logger');
-  }
   return applyMiddleware.apply(null, middlewareStack);
 }
 
@@ -52,7 +56,6 @@ function createMiddlewareStack (middlewares, isLogging) {
  * 1. Support for Redux DevTools and most monitor implementations (DEV only).
  * 2. Middleware
  *     - redux-thunk
- *     - redux-logger (DEV only)
  *
  * @param {Redux.Reducer} rootReducer - The top level reducer, to used in
  *        the redux store.
@@ -60,12 +63,7 @@ function createMiddlewareStack (middlewares, isLogging) {
  * @param {Boolean} [isLogging=false] - Whether to log to redux actions to console.
  * @returns {Redux.Store}
  */
-export function configureStore (
-  rootReducer,
-  middlewares = [],
-  enhancers = [],
-  isLogging = false
-) {
+export function configureStore (rootReducer, middlewares = [], enhancers = []) {
   const initialState = {};
   let allMiddleware = [];
   if (middlewares) allMiddleware = allMiddleware.concat(middlewares);
@@ -73,6 +71,6 @@ export function configureStore (
   return createStore(
     rootReducer,
     initialState,
-    createEnhancer(createMiddlewareStack(allMiddleware, isLogging), ...enhancers)
+    createEnhancer(createMiddlewareStack(allMiddleware), ...enhancers)
   );
 }
