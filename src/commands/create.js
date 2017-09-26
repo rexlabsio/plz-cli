@@ -16,7 +16,7 @@ const changeCase = require('change-case');
 const u = require('../libs/util');
 
 const TEMPLATE_PATH = u.to(__dirname, '../../templates/');
-const REACT_VERSION = '>=15.5.0 <16.0.0';
+const REACT_VERSION = u.pkg.peerDependencies.react;
 const PLZ_CLI_VERSION = '1.x';
 const PLZ_CLI_NAME = u.pkg.name;
 const POST_CREATE_MESSAGES = {
