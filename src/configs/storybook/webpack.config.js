@@ -114,11 +114,19 @@ function includePlzPackagesToBabel (conf) {
   });
 }
 
+// HACK
 function applyHackFixes (conf) {
-  // HACK: Remove the extract text plugin, because webpack versions were
-  // causing problems
-  conf.plugins = conf.plugins.filter(
-    p => p.constructor.name !== 'ExtractTextPlugin'
+  const filterPlugins = (...names) => {
+    conf.plugins = conf.plugins.filter(
+      p => !names.includes(p.constructor.name)
+    );
+  };
+
+  filterPlugins(
+    // Webpack versions, in nwb and storybook, were causing problems
+    'ExtractTextPlugin',
+    // Building storybook failed because of node_modules modules with ES6
+    'UglifyJsPlugin'
   );
 }
 

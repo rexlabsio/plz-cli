@@ -107,14 +107,22 @@ function loadCliCommands () {
     yargs,
     'stories',
     'Starts a storybook for UI components.',
-    yarns =>
-      yargs.options('root-path', {
-        type: 'string',
-        default: 'components',
-        describe: 'Directory to search in, for multiple package stories.'
-      }),
+    yargs =>
+      yargs
+        .options('root-path', {
+          type: 'string',
+          default: 'components',
+          describe: 'Directory to search in, for multiple package stories.'
+        })
+        .options('output-path', {
+          type: 'string',
+          describe: 'Directory to build & output a static storybook app.'
+        }),
     'Storybook is an interactive development & testing environment for React ' +
-      'Components. Its \'stories\' are also used for snapshot testing.'
+      'Components. Its \'stories\' are also used for snapshot testing.\n\n' +
+      `The Storybook app can be built into a static site by using the ${u.bold(
+        '--output-path'
+      )} argument.`
   );
 
   u.registerCommand(
@@ -124,7 +132,6 @@ function loadCliCommands () {
     'Uses nwb to build two kinds of modules for distribution: cjs and es.'
   );
 
-  // TODO: Remove this command once we've made sure that all we really need are stories.
   u.registerCommand(
     yargs,
     'serve',

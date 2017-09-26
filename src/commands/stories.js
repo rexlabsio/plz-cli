@@ -25,9 +25,13 @@ const detectPort = require('detect-port');
 const glob = pify(require('glob'));
 const u = require('../libs/util');
 
-const STORYBOOK_BIN_PATH = u.to(
+const STORYBOOK_SERVER_BIN_PATH = u.to(
   __dirname,
   '../../node_modules/.bin/storybook-server'
+);
+const STORYBOOK_BUILD_BIN_PATH = u.to(
+  __dirname,
+  '../../node_modules/.bin/build-storybook'
 );
 const STORYBOOK_CONFIG_PATH = u.to(__dirname, '../configs/storybook');
 const STORYBOOK_ARGS = ['--config-dir', STORYBOOK_CONFIG_PATH];
@@ -50,10 +54,8 @@ const MONOREPO_READMES_GLOB_PATTERN = dir =>
   `${process.cwd()}/${dir}/*/readme.md`;
 const PACKAGE_READMES_GLOB_PATTERN = `${process.cwd()}/readme.md`;
 
-u.debug('storybook args:\n', STORYBOOK_ARGS);
-
-async function checkStorybookExists () {
-  return u.accessBin(STORYBOOK_BIN_PATH).catch(err => {
+async function checkStorybookExists (binPath) {
+  return u.accessBin(binPath).catch(err => {
     console.error(
       `Could not find storybook. Are you sure it has been installed in ${u.pkg
         .name}?\n${err.message}`
@@ -63,7 +65,7 @@ async function checkStorybookExists () {
 }
 
 async function isMonoRepoRoot (rootPath) {
-  return await fs.exists(`${process.cwd()}/${rootPath}`);
+  return fs.exists(`${process.cwd()}/${rootPath}`);
 }
 
 async function getStoriesGlobForCurrentDir (rootPath) {
@@ -119,18 +121,36 @@ async function checkStoriesExists (rootPath, storiesGlobPattern) {
   }
 }
 
-async function runStorybook ({ rootPath }) {
-  await checkStorybookExists();
+async function runStorybook ({ rootPath, outputPath }) {
   await checkStoriesExists(rootPath, await writePatternFile(rootPath));
 
-  const port = await detectPort(u.DEFAULT_PORT);
-  const args = STORYBOOK_ARGS.concat(['--port', port]).join(' ');
+  let command;
+  if (outputPath) {
+    /*
+    |---------------------------------------------------------------------------
+    | Build a static storybook app.
+    |---------------------------------------------------------------------------
+    */
+    await checkStorybookExists(STORYBOOK_BUILD_BIN_PATH);
+    const args = STORYBOOK_ARGS.concat(['--output-dir', u.to(outputPath)]).join(
+      ' '
+    );
+    command = `${STORYBOOK_BUILD_BIN_PATH} ${args}`;
+  } else {
+    /*
+    |---------------------------------------------------------------------------
+    | Start a storybook server.
+    |---------------------------------------------------------------------------
+    */
+    await checkStorybookExists(STORYBOOK_SERVER_BIN_PATH);
+    const port = await detectPort(u.DEFAULT_PORT);
+    const args = STORYBOOK_ARGS.concat(['--port', port]).join(' ');
+    command = `${STORYBOOK_SERVER_BIN_PATH} ${args}`;
+  }
 
-  const command = `${STORYBOOK_BIN_PATH} ${args}`;
-
-  return u.exec(command, {
-    env: Object.assign({}, process.env, { STORYBOOK_CWD: process.cwd() })
-  });
+  u.debug('storybook command:\n', command);
+  const env = Object.assign({}, process.env, { STORYBOOK_CWD: process.cwd() });
+  return u.exec(command, { env });
 }
 
 module.exports = argv => {
