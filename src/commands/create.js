@@ -44,7 +44,7 @@ const fetchPkgVersion = async (registry, pkgName) =>
       npm_config_registry: registry
     })
   });
-async function scaffold (name, templateName, targetDir, type, spinner) {
+async function scaffold (name, templateName, targetDir, projectType, spinner) {
   spinner.start();
   const start = +new Date();
   const isRegistryOnline = await isUp(REGISTRY_DOMAIN).catch(() => false);
@@ -114,9 +114,9 @@ async function scaffold (name, templateName, targetDir, type, spinner) {
       .execGetOutput('git config remote.origin.url', optIgnore)
       .catch(() => {
         infoSpin(
-          'After initializing git update the "repo" field in package.json'
+          'The "repository" field in package.json requires updating once Git is initialized.'
         )();
-        return 'FILL_IN_LATER';
+        return '';
       })
       .then(cleanBuffer),
     fetchVersion('@rexlabs/styling', '1.x'),
@@ -151,7 +151,7 @@ async function scaffold (name, templateName, targetDir, type, spinner) {
   };
 
   // Secondly, we run the template through a mustache engine to the target dir
-  const templatePath = path.resolve(TEMPLATE_PATH, type);
+  const templatePath = path.resolve(TEMPLATE_PATH, projectType);
   const err = await u.getWriteError(templatePath);
   if (err) {
     spinner.stop();
@@ -170,8 +170,10 @@ async function scaffold (name, templateName, targetDir, type, spinner) {
       const [head, ...lines] = msg.split('\n');
       console.log(`\n  ${head}\n\n${lines.map(l => `    ${l}`).join('\n')}`);
     };
-    if (type in POST_CREATE_MESSAGES) {
-      logPostMessage(POST_CREATE_MESSAGES[type]({ relDir, name: username }));
+    if (projectType in POST_CREATE_MESSAGES) {
+      logPostMessage(
+        POST_CREATE_MESSAGES[projectType]({ relDir, name: username })
+      );
     }
     if (!isRegistryOnline) {
       logPostMessage(POST_CREATE_MESSAGES.OFFLINE);
@@ -179,17 +181,17 @@ async function scaffold (name, templateName, targetDir, type, spinner) {
   }
 }
 
-async function runScaffoldCommand ({ name, rootDir = '', type }) {
+async function runScaffoldCommand ({ name, rootDir = '', projectType }) {
   if (!name) {
     console.error(new Error('Missing a valid package name.'));
     process.exit(1);
   }
   const packageName = changeCase.paramCase(name);
-  const templateName = changeCase.titleCase(type);
+  const templateName = changeCase.titleCase(projectType);
   u.debug('"name":     %o', packageName);
   u.debug('"templateName":     %o', templateName);
   u.debug('"rootDir":  %o', rootDir);
-  u.debug('"type":     %o', type);
+  u.debug('"projectType":     %o', projectType);
 
   const rootDirRel = u.cwdTo(rootDir);
   const packageDir = u.cwdTo(rootDirRel, packageName);
@@ -204,7 +206,13 @@ async function runScaffoldCommand ({ name, rootDir = '', type }) {
     );
   } else {
     try {
-      await scaffold(packageName, templateName, packageDir, type, spinner);
+      await scaffold(
+        packageName,
+        templateName,
+        packageDir,
+        projectType,
+        spinner
+      );
     } catch (err) {
       spinner.stop();
       spinner.clear();

@@ -50,10 +50,15 @@ function throwInvalidProjectType (config, TYPES) {
   const headMsg =
     'Project type needs to be configured to one of the following:';
   const mainListMsg = TYPES.map(x => u.dotpoint(x)).join('\n');
+
   console.error(
     u.wrapLinesInError(
-      'Invalid Project Type',
-      `${typeMsg}\n\n${headMsg}\n\n${mainListMsg}\n\n${u.linkToReadme()}`
+      'Usage Error',
+      `${`The type give to \`${u.muted.white(
+        `--project-type${config.projectType ? `=${config.projectType}` : ''}`
+      )}\` was invalid.`}\n\nUse one of the following:\n\n${mainListMsg}\n\n${`For more details run ${u.bold(
+        u.$0 + ' help'
+      )}`}, or visit ${u.linkToReadme()}.`
     )
   );
   process.exit(1);
@@ -92,9 +97,9 @@ function loadCliConfig () {
   };
 
   const TYPES = [
+    PROJECT_TYPE_MODULE,
     PROJECT_TYPE_REACT_APP,
-    PROJECT_TYPE_REACT_COMPONENT,
-    PROJECT_TYPE_MODULE
+    PROJECT_TYPE_REACT_COMPONENT
   ];
 
   function applyArgvConfig (config) {

@@ -70,34 +70,14 @@ function loadCliCommands () {
       '`'
     )}.`,
     yargs => {
-      u
-        .registerOption(
-          yargs,
-          'project-type',
-          't',
-          'Type of project',
-          undefined,
-          defaultTempalate
-        )
-        .check(function (argv) {
-          if (templates.includes(argv.type)) {
-            return true;
-          } else {
-            console.log(
-              u.wrapLinesInError(
-                'Usage Error',
-                `${chalk.red(
-                  `The type give to \`${u.muted.white(
-                    `--project-type=${argv.type}`
-                  )}\` was invalid.`
-                )}\n\nUse one of the following:\n\n${templateList}\n${`For more details run \`${u.bold(
-                  u.$0 + ' help create'
-                )}`}\``
-              )
-            );
-            process.exit(1);
-          }
-        });
+      u.registerOption(
+        yargs,
+        'project-type',
+        't',
+        'Type of project',
+        undefined,
+        defaultTempalate
+      );
 
       u.registerOption(
         yargs,

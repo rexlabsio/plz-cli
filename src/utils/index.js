@@ -53,8 +53,7 @@ const deprecate = s =>
   !deprecatePile.includes(s)
     ? deprecatePile.push(s) && `${chalk.black.bgYellow(' DEPRECATED ')} ${s}`
     : undefined;
-const linkToReadme = () =>
-  `See ${warn('https://git.io/vdaQw')} for more details.`;
+const linkToReadme = () => warn('https://git.io/vdaQw');
 
 function emoji (emojiChar, trailing = '  ', replacement = '') {
   if (!emojiChar) return replacement;
@@ -137,8 +136,10 @@ function pushDeprecation (msg) {
 }
 
 function logDeprecations () {
-  deprecations.forEach(d => console.warn(deprecate(d)));
-  console.log();
+  if (deprecations.length) {
+    deprecations.forEach(d => console.warn(deprecate(d)));
+    console.log();
+  }
 }
 
 function getPackageJson () {
