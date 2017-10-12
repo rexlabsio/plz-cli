@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/rexlabsio/vivid/compare/@rexlabs/plz-cli@1.33.0...@rexlabs/plz-cli@2.0.0) (2017-10-12)
+
+
+### Features
+
+* **plz-cli:** Improve dx with configurability ([5ea9f22](https://github.com/rexlabsio/vivid/commit/5ea9f22))
+
+
+### BREAKING CHANGES
+
+* **plz-cli:** The "type" config option was changed to "projectType"
+* **plz-cli:** The "--output-path" option for stories has changed to "--output-dir"
+* **plz-cli:** Can no longer use nwb.config.js to customise config
+
+
+
+
 <a name="1.33.0"></a>
 # 1.33.0 (2017-09-26)
 
