@@ -8,7 +8,7 @@
   "plz:main": "src/index.js",
   "files": [
     "lib",
-    "es",
+    "module",
     "package.json",
     "readme.md"
   ],
