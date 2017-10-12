@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.0.1"></a>
+## [2.0.1](https://github.com/rexlabsio/vivid/compare/@rexlabs/plz-cli@2.0.0...@rexlabs/plz-cli@2.0.1) (2017-10-12)
+
+
+### Bug Fixes
+
+* **plz-cli:** Fix plz create command's handling of project-type ([8c005ec](https://github.com/rexlabsio/vivid/commit/8c005ec))
+* **plz-cli:** Update module templates with relevant files field ([e01fa24](https://github.com/rexlabsio/vivid/commit/e01fa24))
+
+
+
+
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/rexlabsio/vivid/compare/@rexlabs/plz-cli@1.33.0...@rexlabs/plz-cli@2.0.0) (2017-10-12)
 
