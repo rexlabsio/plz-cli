@@ -12,13 +12,16 @@ const pify = require('pify');
 const fs = pify(require('fs'));
 const childproc = require('child_process');
 const path = require('path');
+const _ = require('lodash');
+const changeCase = require('change-case');
 const debug = require('debug')('plz');
 const chalk = require('chalk');
 const ora = require('ora');
 const _exec = pify(childproc.exec);
+const filesize = require('filesize');
+const { sync: gzipSize } = require('gzip-size');
 
-const getCliConfig = require('./parse-config');
-
+const plzRoot = path.resolve(__dirname, '../../');
 const binName = Object.keys(pkg.bin)[0];
 const logo = chalk.bold.magenta(`
               ___
@@ -37,22 +40,41 @@ const bold = chalk.bold;
 const muted = chalk.dim;
 const error = chalk.bold.red;
 const warn = chalk.yellow;
+const success = chalk.green;
+const info = chalk.blue;
 const header = chalk.blue;
 const cmd = chalk.bold.yellow;
 const req = chalk.magenta;
 const opt = chalk.cyan;
 const dotpoint = s => `  ◦ ${s}`;
+const underpoint = s => `    ${s}`;
+const deprecatePile = [];
+const deprecate = s =>
+  !deprecatePile.includes(s)
+    ? deprecatePile.push(s) && `${chalk.black.bgYellow(' DEPRECATED ')} ${s}`
+    : undefined;
+const linkToReadme = () =>
+  `See ${warn('https://git.io/vdaQw')} for more details.`;
+
+function emoji (emojiChar, trailing = '  ', replacement = '') {
+  if (!emojiChar) return replacement;
+  return !process.argv.includes('--no-emoji')
+    ? emojiChar + (trailing || '')
+    : replacement;
+}
 
 function spinner (optionsOrText) {
   let options = {
-    spinner: {
-      interval: 120,
-      frames: [
-        chalk.green.bold('☱ '),
-        chalk.green.bold('☲ '),
-        chalk.green.bold('☴ ')
-      ]
-    }
+    spinner: process.argv.includes('--no-emoji')
+      ? ' '
+      : {
+        interval: 120,
+        frames: [
+          chalk.green.bold('☱ '),
+          chalk.green.bold('☲ '),
+          chalk.green.bold('☴ ')
+        ]
+      }
   };
   if (typeof optionsOrText === 'string') {
     options.text = optionsOrText;
@@ -89,50 +111,63 @@ async function accessBin (pathToBin) {
   });
 }
 
+let _argv;
+function setGlobalArgv (argv) {
+  if (argv.storybook) {
+    // Hack: Make sure that nested args
+    const keys = Object.keys(argv.storybook);
+    _.forEach(keys, key => {
+      const camelled = changeCase.camelCase(key);
+      argv.storybook[camelled] = argv.storybook[key];
+    });
+  }
+
+  _argv = argv;
+  process.env.CLI_ARGV = JSON.stringify(_argv);
+  debug('Set "globalArgv": %o', _argv);
+}
+
+function globalArgv () {
+  return _argv || JSON.parse(process.env.CLI_ARGV || {});
+}
+
+let deprecations = [];
+function pushDeprecation (msg) {
+  deprecations.push(msg);
+}
+
+function logDeprecations () {
+  deprecations.forEach(d => console.warn(deprecate(d)));
+  console.log();
+}
+
 function getPackageJson () {
   const filePath = cwdTo('package.json');
   let pkgObj = {};
   try {
     pkgObj = require(filePath);
   } catch (err) {}
+
   return pkgObj;
-}
-
-/**
- * @returns {plzConfigDefault}
- */
-function loadCliConfig () {
-  const pkgJsonObj = getPackageJson();
-  return getCliConfig(pkgJsonObj);
-}
-
-const NWB_PROJECT_MAPPING = {
-  undefined: 'react-components',
-  module: 'react-components',
-  'react-component': 'react-components',
-  'react-app': 'react-apps'
-};
-function nwbConfigPath () {
-  const type = loadCliConfig().type;
-  return path.resolve(
-    __dirname,
-    `../configs/webpack/nwb.config.${NWB_PROJECT_MAPPING[type]}.js`
-  );
 }
 
 const DEFAULT_EXEC_SPAWN_OPTIONS = {
   cwd: process.cwd()
 };
 
-function wrapLinesInError (header, lines) {
-  const maxLength = lines
-    .split('\n')
-    .reduce((max, line) => (line.length > max ? line.length : max), 0);
-  let head = `  ${header.toUpperCase()}  `;
+function wrapLinesInError (header, lines, isUpperCase = true) {
+  const maxLength = process.stdout.columns;
+  let head = `  ${isUpperCase ? header.toUpperCase() : header}  `;
   const top = muted(error('–'.repeat(maxLength - head.length)));
   const bottom = muted(error('–'.repeat(maxLength)));
   head = chalk.bold.bgRed.white(head);
   return `\n${head}${top}\n\n${lines.trim()}\n\n${bottom}\n`;
+}
+
+function clearConsole () {
+  process.stdout.write(
+    process.platform === 'win32' ? '\x1Bc' : '\x1B[2J\x1B[3J\x1B[H'
+  );
 }
 
 function exec (
@@ -140,7 +175,8 @@ function exec (
   spawnOptions = {},
   spinnerText = '',
   spinnerSucceedText = 'Success!',
-  spinnerFailText = 'Failed.'
+  spinnerFailText = 'Failed.',
+  isSpinnerConstant = true
 ) {
   const { ignoreExits } = spawnOptions;
   let spins = spinnerText ? spinner() : null;
@@ -156,7 +192,9 @@ function exec (
   spawnOptions.env = Object.assign(
     {},
     spawnOptions.env || process.env,
-    // Chalk in child procs know to still use color
+    // We need storybook-server etc to know our config.
+    { CLI_ARGV: process.env.CLI_ARGV },
+    // Chalk in child procs know to still use color.
     process.stdout.isTTY ? { FORCE_COLOR: 'true' } : {}
   );
   return new Promise((resolve, reject) => {
@@ -165,15 +203,17 @@ function exec (
     const cmdBaseName = path.basename(cmd).replace(/\.\w+$/, '');
     args = args.slice(1);
 
-    debug('spawning cmd:     ', cmd);
-    debug('spawning args:    ', args);
-    debug('spawning options: \n', spawnOptions);
+    debug('Spawning "cmd":\n%O', cmd);
+    debug('Spawning "args":\n%O', args);
+    debug('Spawning "options":\n%O', spawnOptions);
 
     let outdump = '';
     const proc = childproc.spawn(cmd, args, spawnOptions);
     if (spins) {
       spins.text = spinnerText;
-      spins.start(spinnerText);
+      if (isSpinnerConstant) {
+        spins.start(spinnerText);
+      }
 
       const onData = dat => {
         outdump += dat.toString();
@@ -222,15 +262,20 @@ const DEFAULT_EXEC_OUPUT_OPTIONS = {
 
 function execGetOutput (command, execOptions = {}) {
   execOptions = Object.assign({}, DEFAULT_EXEC_OUPUT_OPTIONS, execOptions);
+  execOptions.env = Object.assign(
+    { CLI_ARGV: process.env.CLI_ARGV, HOME: process.env.HOME },
+    execOptions.env || {}
+  );
 
-  debug('exec command:     ', command);
-  debug('exec options: \n', execOptions);
+  debug('"execGetOutput" command: %o', command);
+  debug('"execGetOutput" options: %o', execOptions);
   return _exec(command, execOptions);
 }
 
 function unhandledError (err) {
-  console.error(`${error('Unhandled Error:')}`);
+  console.log(`\n${error('Unhandled Error:')}`);
   console.error(err);
+  process.exit(1);
 }
 
 function escapeStringForShell (str) {
@@ -250,13 +295,14 @@ function loadYargsColors () {
     .style('cyan')
     .style('magenta', 'required')
     .style('blue', 'Help:')
+    .style('blue', 'Project Config:')
     .style('blue', 'builds.')
     .helpStyle('blue')
     .errorsStyle('red');
 }
 
 function printCmd (cmd) {
-  debug('external registerCommand:', cmd);
+  debug('External "registerCommand": %o', cmd);
 }
 
 const nodeCliRegex = /.*node$/;
@@ -315,13 +361,15 @@ function registerCommand (yargs, cmdConf, desc, builder, descMore) {
   }
 
   function commandHandler (argv) {
-    debug(`running command '${cmdAndArgs}'`);
+    debug('Running command: %o', cmdAndArgs);
     const hit = argv._[0];
     const txt = `plz ${hit}`;
-    console.log(muted(`${txt} v${pkg.version}\n`));
+    console.log(muted(`${txt} v${pkg.version}`));
+    console.log();
+    logDeprecations();
 
     // NOTE: Require the commands dynamically to dramatically improve bootup perf.
-    require('../commands/' + cmdFileName)(argv);
+    require('src/commands/' + cmdFileName)(argv);
   }
 
   function usageBuilder (yargs) {
@@ -351,7 +399,7 @@ function registerCommand (yargs, cmdConf, desc, builder, descMore) {
   // NOTE: The 'print pretty' command never get's handled, because of the shell
   //       escape chars that proceed the real command text.
   if (process.stdout.isTTY) {
-    debug(`register command inside TTY: ${cmdAndArgs}`);
+    debug('Register command (TTY): %o', cmdAndArgs);
     yargs.command(
       Object.assign(
         {
@@ -375,18 +423,28 @@ function registerCommand (yargs, cmdConf, desc, builder, descMore) {
     // command text. This avoids doubling up on registered commands which can cause
     // hard to track bugs.
   } else {
-    debug(`register command outside TTY: ${cmdAndArgs}`);
+    debug('Register command: %o', cmdAndArgs);
     yargs.command(Object.assign({ desc }, actionableCommandConfig));
   }
 }
 
-function registerOption (yargs, option, alias, desc, type) {
+function registerOption (
+  yargs,
+  option,
+  alias,
+  desc,
+  type,
+  Default,
+  defaultDesc
+) {
   const actionableConf = {};
   if (alias) actionableConf.alias = alias;
   if (type) actionableConf.type = type;
   if (desc) actionableConf.desc = muted(desc);
+  if (Default) actionableConf.default = Default;
+  if (defaultDesc) actionableConf.defaultDescription = defaultDesc;
 
-  yargs.option(option, actionableConf);
+  return yargs.option(option, actionableConf);
 }
 
 function to (...paths) {
@@ -397,46 +455,216 @@ function cwdTo (...paths) {
   return to(process.cwd(), ...paths);
 }
 
-module.exports = {
-  DEFAULT_PORT: 3000,
+function cwdRel (p) {
+  return path.relative(process.cwd(), p);
+}
 
+const namesToModulePaths = (prefix, paths) => {
+  const REGEX_CLEAN_PREFIX = `^${prefix}`;
+  return _.map(paths, name => {
+    const moduleOpt = _.isArray(name) ? name[0] : name;
+    const moduleName = `${prefix}${moduleOpt.replace(REGEX_CLEAN_PREFIX, '')}`;
+    const modulePath = require.resolve(moduleName);
+    return _.isArray(name) ? [modulePath, name[1]] : modulePath;
+  });
+};
+
+const absolutifyBabel = config => {
+  const conf = Object.assign({}, config);
+  conf.presets = namesToModulePaths('babel-preset-', conf.presets);
+  conf.plugins = namesToModulePaths('babel-plugin-', conf.plugins);
+  return conf;
+};
+
+const FRIENDLY_SYNTAX_ERROR_LABEL = 'Syntax error:';
+const s = n => (n === 1 ? '' : 's');
+
+function formatMessage (message) {
+  return (
+    message
+      // Make some common errors shorter:
+      .replace(
+        // Babel syntax error
+        'Module build failed: SyntaxError:',
+        FRIENDLY_SYNTAX_ERROR_LABEL
+      )
+      .replace(
+        // Webpack file not found error
+        /Module not found: Error: Cannot resolve 'file' or 'directory'/,
+        'Module not found:'
+      )
+      // Webpack loader names obscure CSS filenames
+      .replace(/^.*css-loader.*!/gm, '')
+  );
+}
+
+function formatMessages (messages, type) {
+  return messages.map(message => `${type} in ${formatMessage(message)}`);
+}
+
+function isLikelyASyntaxError (message) {
+  return message.includes(FRIENDLY_SYNTAX_ERROR_LABEL);
+}
+
+function logErrorsAndWarnings (stats) {
+  // Show fewer error details
+  let json = stats.toJson({}, true);
+
+  let formattedErrors = formatMessages(json.errors, error('Error'));
+  let formattedWarnings = formatMessages(json.warnings, warn(' WARNING '));
+
+  if (stats.hasErrors()) {
+    let errors = formattedErrors.length;
+    // let message = error(`Failed to compile with ${errors} error${s(errors)}.`);
+    if (formattedErrors.some(isLikelyASyntaxError)) {
+      // If there are any syntax errors, show just them.
+      // This prevents a confusing ESLint parsing error preceding a much more
+      // useful Babel syntax error.
+      formattedErrors = formattedErrors.filter(isLikelyASyntaxError);
+    }
+    let message = formattedErrors.join('\n\n');
+    console.log(
+      wrapLinesInError(
+        `Failed to compile with ${errors} error${s(errors)}.`,
+        message,
+        false
+      )
+    );
+    return;
+  }
+
+  if (stats.hasWarnings()) {
+    let warnings = formattedWarnings.length;
+    console.log(warn(`Compiled with ${warnings} warning${s(warnings)}.`));
+    formattedWarnings.forEach(message => {
+      console.log();
+      console.log(message);
+    });
+  }
+}
+
+function getFileDetails (stats) {
+  let outputPath = stats.compilation.outputOptions.path;
+  return Object.keys(stats.compilation.assets)
+    .filter(assetName => /\.(css|js)$/.test(assetName))
+    .map(assetName => {
+      let size = gzipSize(stats.compilation.assets[assetName].source());
+      return {
+        dir: path.dirname(
+          path.join(path.relative(process.cwd(), outputPath), assetName)
+        ),
+        name: path.basename(assetName),
+        size,
+        sizeLabel: filesize(size)
+      };
+    });
+}
+
+function logGzippedFileSizes (...stats) {
+  let files = stats
+    .reduce((files, stats) => files.concat(getFileDetails(stats)), [])
+    .filter(({ name }) => !/^manifest\.[a-z\d]+\.js$/.test(name));
+
+  let longest = files.reduce((max, { dir, name }) => {
+    let length = (dir + name).length;
+    return length > max ? length : max;
+  }, 0);
+  let pad = (dir, name) => Array(longest - (dir + name).length + 1).join(' ');
+
+  console.log(`File size${s(files.length)} after gzip:`);
+  console.log();
+
+  files
+    .sort((a, b) => b.size - a.size)
+    .forEach(({ dir, name, size, sizeLabel }) => {
+      const sizeKb = size / 1024;
+      const sizeColor =
+        sizeKb < 350 ? chalk.green : sizeKb < 800 ? chalk.yellow : chalk.red;
+      console.log(
+        `  ${chalk.dim(`${dir}${path.sep}`)}${chalk.bold(name)}` +
+          `  ${pad(dir, name)}${sizeColor(sizeLabel)}`
+      );
+    });
+}
+
+function logBuildResults (stats, spinner, spinnerSucceedText, spinnerFailText) {
+  if (stats.hasErrors()) {
+    if (spinner) {
+      spinner.stop(spinnerFailText);
+      console.log();
+    }
+    logErrorsAndWarnings(stats);
+  } else if (stats.hasWarnings()) {
+    if (spinner) {
+      spinner.stopAndPersist(warn('⚠'));
+      console.log();
+    }
+    logErrorsAndWarnings(stats);
+    console.log();
+    logGzippedFileSizes(stats);
+  } else {
+    if (spinner) {
+      spinner.succeed(spinnerSucceedText);
+      console.log();
+    }
+    logGzippedFileSizes(stats);
+  }
+}
+
+module.exports = {
   // Console formatting helpers
   logo,
   $0,
+  emoji,
   underline,
   italic,
   bold,
   muted,
   warn,
   error,
+  success,
+  info,
   header,
   cmd,
   req,
   opt,
   dotpoint,
+  underpoint,
+  deprecate,
+  linkToReadme,
   wrapLinesInError,
+  pushDeprecation,
+  logDeprecations,
+  clearConsole,
   decorateCmd,
   decorateCliCmd,
   prefixTerm,
 
   // Rest of utils
+  setGlobalArgv,
+  globalArgv,
   registerCommand,
   registerOption,
+  plzRoot,
   pkg,
   debug,
   spinner,
   getWriteError,
   to,
   cwdTo,
+  cwdRel,
+  getPackageJson,
   accessFile,
   accessBin,
-  loadCliConfig,
-  nwbConfigPath,
   exec,
   execGetOutput,
   unhandledError,
   escapeStringForShell,
   trimLeft,
   printCmd,
-  loadYargsColors
+  loadYargsColors,
+  absolutifyBabel,
+  logErrorsAndWarnings,
+  logGzippedFileSizes,
+  logBuildResults
 };

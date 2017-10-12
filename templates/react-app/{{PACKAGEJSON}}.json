@@ -65,13 +65,5 @@
         "eslint"
       ]
     }
-  },
-  "config": {
-    "plz": {
-      "type": "react-app",
-      "storybook": {
-        "name": "{{TITLE_NAME}}"
-      }
-    }
   }
 }

@@ -20,7 +20,7 @@
 import * as storybook from '@storybook/react';
 import * as knobs from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
-import { heidiAddon } from '../../../storybook-heidi-addon';
+import { heidiAddon } from '../addons/heidi-addon';
 heidiAddon.isStoryShot = true; // Used to signal to addons to avoid noisy code/render paths.
 
 // Adds the '.addStory(storyConfig)' api to storybook
@@ -36,8 +36,8 @@ function loadStories () {
 
   // Setup each story to have a readme in it, when available, regardless of if
   // the consumer uses a HeidiStorybook.
-  const storiesOf = (name, ...args) =>
-    storybook.storiesOf(name, ...args).addDecorator(knobs.withKnobs);
+  const storiesOf = name =>
+    storybook.storiesOf(name, module).addDecorator(knobs.withKnobs);
 
   const _storybook = Object.assign({}, storybook, { storiesOf });
   stories(_storybook, addons);

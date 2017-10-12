@@ -4,8 +4,10 @@ import { connect } from 'react-redux';
 const styles = {
   Container: {
     boxSizing: 'border-box',
-    color: '#d8809a',
+    backgroundColor: 'lightpink',
+    color: '#d36f8d',
     fontSize: '2rem',
+    fontWeight: '600',
     height: '100vh',
     width: '100vw',
     display: 'flex',
@@ -15,7 +17,9 @@ const styles = {
   },
   Napolean: {
     borderRadius: 50,
-    marginTop: 50
+    marginTop: 50,
+    border: 'solid 0.75rem #d8809a',
+    boxShadow: '0.75rem 1rem 0 #d36f8d'
   }
 };
 
@@ -26,10 +30,8 @@ class {{PASCAL_NAME}}App extends Component {
   render () {
     return (
       <div style={styles.Container}>
-        <h1>THIS IS AN APP</h1>
         <p>
-          It is {this.props.app.ready ? 'ready' : 'not ready'} and incredibly
-          {this.props.connection.isOnline ? 'online' : 'offline'}.
+          {`I am ${this.props.app.ready ? 'ready' : 'not ready'} and incredibly ${this.props.connection.isOnline ? 'online' : 'offline'}.`}
         </p>
         <img
           style={styles.Napolean}

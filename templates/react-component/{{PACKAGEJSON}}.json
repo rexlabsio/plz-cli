@@ -35,5 +35,8 @@
   "keywords": [
     "react-component",
     "heidi-component"
-  ]
+  ],
+  "plz": {
+    "type": "react-component"
+  }
 }

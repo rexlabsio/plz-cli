@@ -15,15 +15,20 @@ function loadCliCommands () {
   /* Quick print version. Note: Avoids loading config, which can add ~500ms */
   if (process.argv.includes('--version') || process.argv.includes('-v')) {
     console.log(require('../package').version);
-    process.exit(0);
+    process.reallyExit(0);
   }
 
   /* Load modules when we hit the hot code. */
   const chalk = require('chalk');
-  const u = require('./libs/util');
+  const {
+    PROJECT_TYPE_REACT_APP,
+    PROJECT_TYPE_REACT_COMPONENT,
+    PROJECT_TYPE_MODULE
+  } = require('src/utils/constants');
+  const u = require('src/utils');
   u.loadYargsColors();
-  /** @type yargs.Argv */
   const yargs = require('yargs');
+  u.setGlobalArgv(yargs.argv);
 
   /*
   |--------------------------------------
@@ -32,7 +37,7 @@ function loadCliCommands () {
   */
   const usageLines = [
     u.logo,
-    `  ${u.prefixTerm(u.decorateCliCmd(u.$0 + ' <command> [options]', true))}`,
+    ` ${u.prefixTerm(u.decorateCliCmd(u.$0 + ' <command> [options]', true))}`,
     u.pkg.description
   ];
   yargs.usage(usageLines.join('\n\n'));
@@ -42,51 +47,72 @@ function loadCliCommands () {
   | CLI Commands
   |--------------------------------------
   */
-  const templates = ['module', 'react-app', 'react-component'];
-  const defaultTempalate = 'react-component';
+  const templates = [
+    PROJECT_TYPE_MODULE,
+    PROJECT_TYPE_REACT_APP,
+    PROJECT_TYPE_REACT_COMPONENT
+  ];
+  const defaultTempalate = PROJECT_TYPE_REACT_COMPONENT;
   const templateList = templates
-    .map(template => `${u.dotpoint(u.underline(template))}`)
+    .map(
+      template =>
+        `${u.dotpoint(u.underline(template))}\n${u.underpoint(
+          u.muted(`--project-type=${template}`)
+        )}\n`
+    )
     .join('\n');
   u.registerCommand(
     yargs,
-    { command: 'create <name> [root-path]', file: 'create' },
-    `Generates a package/app called ${u.bold('`')}${u.muted(
+    { command: 'create <name> [root-dir]', file: 'create' },
+    `Generates a project called ${u.bold('`')}${u.muted(
       `${u.pkg.name.split('/')[0]}/`
-    )}${u.bold('<name>')}${u.bold('`')}.`,
-    yargs =>
-      yargs
-        .options({
-          type: {
-            default: defaultTempalate,
-            describe: 'Type of Package'
-          },
-          'root-path': {
-            type: 'string',
-            describe: 'Root path',
-            default: process.cwd(),
-            defaultDescription: 'Current directory'
-          }
-        })
+    )}${chalk.reset('<')}${chalk.magenta('name')}${chalk.reset('>')}${u.bold(
+      '`'
+    )}.`,
+    yargs => {
+      u
+        .registerOption(
+          yargs,
+          'project-type',
+          't',
+          'Type of project',
+          undefined,
+          defaultTempalate
+        )
         .check(function (argv) {
           if (templates.includes(argv.type)) {
             return true;
           } else {
-            throw new Error(
+            console.log(
               u.wrapLinesInError(
                 'Usage Error',
                 `${chalk.red(
                   `The type give to \`${u.muted.white(
-                    `--type=${argv.type}`
+                    `--project-type=${argv.type}`
                   )}\` was invalid.`
-                )}\n\nUse one of the following:\n\n${templateList}`
+                )}\n\nUse one of the following:\n\n${templateList}\n${`For more details run \`${u.bold(
+                  u.$0 + ' help create'
+                )}`}\``
               )
             );
+            process.exit(1);
           }
-        }),
-    'The following package \'types\' are available:\n\n' +
+        });
+
+      u.registerOption(
+        yargs,
+        'root-dir',
+        null,
+        'Root directory',
+        'string',
+        process.cwd(),
+        'Current directory'
+      );
+    },
+    'The following project types are available:\n\n' +
       templateList +
-      '\n\n' +
-      'Package templates use handlebars to generate directories and files.'
+      '\n' +
+      'Project templates use handlebars to generate directories and files.'
   );
 
   u.registerCommand(
@@ -109,37 +135,45 @@ function loadCliCommands () {
     'Starts a storybook for UI components.',
     yargs =>
       yargs
-        .options('root-path', {
+        .options('root-dir', {
           type: 'string',
           default: 'components',
           describe: 'Directory to search in, for multiple package stories.'
         })
-        .options('output-path', {
+        .options('output-dir', {
           type: 'string',
           describe: 'Directory to build & output a static storybook app.'
         }),
     'Storybook is an interactive development & testing environment for React ' +
       'Components. Its \'stories\' are also used for snapshot testing.\n\n' +
       `The Storybook app can be built into a static site by using the ${u.bold(
-        '--output-path'
+        '--output-dir'
       )} argument.`
   );
+
+  u.registerCommand(yargs, 'serve', 'Starts an dev server for the project.');
 
   u.registerCommand(
     yargs,
     'build',
-    'Bundles a package for distribution.',
-    'Uses nwb to build two kinds of modules for distribution: cjs and es.'
+    'Bundles a project for distribution.',
+    `A ${u.bold('package')} will be bundled for two kinds of module systems:
+
+${[
+    'commonjs > require | For the `main` field of package.json.',
+    'es module > import | For the `modules` field of package.json.'
+  ]
+    .map(line => {
+      const [point, under] = line.split(' | ');
+      const [first, method] = point.split(' > ');
+      return `${u.dotpoint(
+        `${first} ${u.muted(`(${u.underline(method)})`)}`
+      )}\n${u.underpoint(u.muted.italic(under))}`;
+    })
+    .join('\n')}`
   );
 
-  u.registerCommand(
-    yargs,
-    'serve',
-    'Starts a demo for UI components.',
-    'Uses nwb to start a webpack server with Hot Module Replacement.'
-  );
-
-  u.registerCommand(yargs, 'clean', 'Removes previous build files.');
+  u.registerCommand(yargs, 'clean', 'Removes previously built files.');
 
   /*
   |--------------------------------------
@@ -148,18 +182,25 @@ function loadCliCommands () {
   */
   u.registerCommand(yargs, { command: 'help' }, 'Shows this help message.');
   u.registerOption(yargs, 'help', 'h', 'Show help', 'boolean');
-  u.registerOption(yargs, 'help-nwb', null, 'Show help for nwb', 'boolean');
-  u.registerOption(yargs, 'help-jest', null, 'Show help for jest', 'boolean');
+  u.registerOption(yargs, 'help-all', null, 'Show all help', 'boolean');
+
+  /*
+  |-------------------------------------------------------------------------------
+  | Options
+  |-------------------------------------------------------------------------------
+  */
+
   u.registerOption(yargs, 'version', 'v', 'Show cli version number', 'boolean');
+
   yargs
-    .command({ command: 'help-nwb', desc: false })
+    .command({ command: 'help-all', desc: false })
     .command({ command: 'help-jest', desc: false })
-    .group(['help', 'help-nwb', 'help-jest', 'version'], 'Help:')
+    .group(['help', 'help-all'], 'Help:')
     .help('help', u.muted('Show help'))
     .epilog(
       `Run \`${u.underline(
         u.decorateCliCmd(`${u.$0} help <command>`)
-      )}\` for more information on specific commands.`
+      )}\` for more info & options.`
     )
     .showHelpOnFail(true)
     .version('version', u.muted('Show cli version number'), u.pkg.version);
@@ -173,29 +214,70 @@ function hasHitImplicitCommand (cli, cmd) {
 
 function parseCommand (cli) {
   /* Load modules when we hit the hot code. */
-  const u = require('./libs/util');
-  const nwb = require('./libs/nwb-manager');
+  const u = require('src/utils');
+  const changeCase = require('change-case');
 
-  if (hasHitImplicitCommand(cli, 'help-nwb')) {
-    u.debug('hit help-nwb');
-    nwb.showHelp().then(() => {
-      process.exit(1);
+  if (hasHitImplicitCommand(cli, 'help-all')) {
+    const _ = require('lodash');
+    u.debug('Hit help-all');
+
+    u.registerOption(cli, 'help-jest', null, 'Show help for jest', 'boolean');
+    cli.group(['help', 'help-all', 'help-jest'], 'Help:');
+    u.registerOption(
+      cli,
+      'no-timestamp',
+      null,
+      'Disable cli timestamp',
+      'boolean'
+    );
+    u.registerOption(cli, 'no-emoji', null, 'Disable emoji', 'boolean');
+    u.registerOption(
+      cli,
+      'report',
+      null,
+      'Show cli runtime reports',
+      'boolean'
+    );
+
+    let projArgs = [];
+    const registerProjArg = (val, key) => {
+      const arg = changeCase.param(key);
+      projArgs.push(arg);
+      u.registerOption(
+        cli,
+        arg,
+        null,
+        changeCase.sentence(key),
+        val != null ? typeof val : 'string'
+      );
+    };
+
+    // Format all the storybook optional commands as: --storybook-<some-option>
+    _.forEach(require('src/configs/project-defaults/base'), (val, key) => {
+      if (key === 'storybook') {
+        _.forEach(val, (x, y) => registerProjArg(x, `${key}-${y}`));
+      } else {
+        registerProjArg(val, key);
+      }
     });
+    cli.group(projArgs, 'Project Config:');
+    cli.showHelp();
     return;
   }
+
   if (hasHitImplicitCommand(cli, 'help-jest')) {
-    u.debug('hit help-jest');
-    const jest = require('./libs/jest-manager');
+    u.debug('Hit help-jest');
+    const jest = require('src/utils/jest-manager');
     jest.showHelp().then(() => {
-      process.exit(1);
+      process.exit(0);
     });
     return;
   }
 
   const currentCommand = cli.argv._[0] || '';
   const availableCommands = cli.getCommandInstance().getCommands();
-  u.debug('parsed command:', currentCommand);
-  u.debug('parsed avail commands:', availableCommands);
+  u.debug('Parsed command: %o', currentCommand);
+  u.debug('Parsed avail commands: %o', availableCommands);
 
   // HACK: Not sure why, but if yargs is handling a command, then the getCommands()
   //       function doesn't return any array entries...
@@ -209,7 +291,7 @@ function parseCommand (cli) {
     console.error(
       highlight(`${prefix}Use one of the listed commands to begin.`)
     );
-    process.exit(1);
+    process.exit(0);
   }
 }
 

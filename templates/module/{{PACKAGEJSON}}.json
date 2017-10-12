@@ -27,9 +27,7 @@
   "author": "Rex Software{{HAS_AUTHOR_EMAIL}}{{AUTHOR_EMAIL}}",
   "license": "UNLICENSED",
   "keywords": [],
-  "config": {
-    "plz": {
-      "type": "module"
-    }
+  "plz": {
+    "type": "module"
   }
 }

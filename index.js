@@ -5,10 +5,10 @@
 | plz cli
 |-------------------------------------------------------------------------------
 |
-| A toolkit for creating, building & testing packages.
+| A toolkit for creating, building & testing packages & apps.
 |
 | The CLI is largely a facade around other tools:
-|  - nwb, by insin           (module bundler)
+|  - webpack                 (module bundler)
 |  - jest, by facebook       (test runner)
 |  - storybook, by community (development environment)
 |
@@ -19,11 +19,11 @@
 |
 */
 
+const startTime = +new Date();
+process.env.CLI_START_TIME = startTime;
 if (require.main !== module) {
   // We treat the file as a module when require'd, to share configs around
-  const u = require('./src/libs/util');
   module.exports = {
-    nwbConfig: require(u.nwbConfigPath()),
     initStoryshots: function initStoryshots () {
       const initStoryshotTest = require('@storybook/addon-storyshots').default;
       const configDirPath = require('path').resolve(
@@ -40,11 +40,37 @@ if (require.main !== module) {
   };
 } else {
   // Otherwise, we execute this file as a CLI
-  const cli = require('./src/cli-init');
-  const u = require('./src/libs/util');
+  const cli = require('src/cli-init');
+  const loadCliConfig = require('src/utils/load-cli-config');
+  const Reporting = require('src/utils/reporting');
+
+  // Setup reporting
+  const reporting = new Reporting(startTime);
+
+  // Register exit hook
+  process.on('exit', () => {
+    const u = require('src/utils');
+    reporting.stop();
+    const { totalTime, peakMB } = reporting.report();
+    totalTime &&
+      console.log(
+        `\n${u.emoji('🙏')}Done in ${(totalTime / 1000).toFixed(2)}s.`
+      );
+    peakMB && console.log(`${u.emoji('🖥')}Peak memory usage ${peakMB}MB`);
+  });
 
   // Start CLI
-  const command = cli.loadCliCommands();
-  u.debug('argv:', command.argv);
-  cli.parseCommand(command);
+  Promise.resolve(
+    (async () => {
+      const command = cli.loadCliCommands();
+      loadCliConfig();
+      cli.parseCommand(command);
+    })()
+  )
+    .then()
+    .catch(err => {
+      console.log(`\n${require('chalk').red('Unhandled Error:')}`);
+      console.error(err);
+      process.exit(1);
+    });
 }

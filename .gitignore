@@ -1,6 +1,7 @@
 # Test output
 /.test-output
 
-# Dynamically created pattern file
+# Dynamically created files
+src/configs/storybook/.babelrc
 src/configs/storybook/stories.pattern
 src/configs/storybook/readmes.pattern

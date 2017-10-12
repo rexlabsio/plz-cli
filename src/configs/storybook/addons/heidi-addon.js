@@ -12,8 +12,7 @@
 const React = require('react');
 const { Component, createElement: h } = React;
 const PropTypes = require('prop-types');
-const { setAddon } = require('@storybook/react');
-const infoAddon = require('@storybook/addon-info').default;
+const withInfo = require('@storybook/addon-info').withInfo;
 const setInfoOptions = require('@storybook/addon-info').setDefaults;
 const GithubMarkdown = require('storybook-readme/components/markdown').default;
 
@@ -28,7 +27,6 @@ setInfoOptions({
   maxPropArrayLength: 3,
   maxPropStringLength: 50
 });
-setAddon(infoAddon);
 
 /*
 | The addon uses Provider / HOC architecture to share readme's across individual
@@ -73,13 +71,13 @@ const ReadmeContainer = props =>
     !props.desc
       ? null
       : h(
-          'p',
+        'p',
         {
           key: 'desc',
           style: { color: 'rgb(68, 68, 68)', fontSize: '15px' }
         },
-          props.desc
-        ),
+        props.desc
+      ),
     h(
       'h1',
       {
@@ -150,17 +148,21 @@ class MarkdownWrapper extends Component {
 const Markdown = withReadmeInfo(MarkdownWrapper);
 
 const heidiAddon = {
-  addStory ({ name, story, props = [], description, desc }) {
+  addStory ({ name, story, props = [], propsExclude = [], description, desc }) {
     if (!Array.isArray(props)) {
       throw new Error(
         'Cannot display propTypes for story. Expected to be provided a collection of component\'s.'
       );
     }
-    const options = { propTables: props };
     const markdown = h(Markdown, { desc: desc || description });
+    const options = {
+      text: markdown,
+      propTables: props,
+      excludePropTypes: propsExclude
+    };
     return heidiAddon.isStoryShot // Info addon add's alot of DOM noise.
       ? this.add(name, story)
-      : this.addWithInfo(name, markdown, story, options);
+      : this.add(name, withInfo(options)(story));
   },
   /**
    * Aligns the story with a grid and container styles.

@@ -10,6 +10,7 @@
 |
 */
 
+import 'utils/globals';
 import _ from 'lodash';
 import React from 'react';
 import { StylesProvider } from '@rexlabs/styling';
@@ -47,4 +48,8 @@ function initStories(storybook, plugins) {
     );
   });
   ExampleStories(storybook, plugins);
+}
+
+export default (storybook, plugins) => {
+  initStories(storybook, plugins);
 }

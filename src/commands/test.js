@@ -8,8 +8,7 @@
 */
 
 const path = require('path');
-const chalk = require('chalk');
-const u = require('../libs/util');
+const u = require('src/utils');
 
 const JEST_CONFIG_PATH = path.resolve(
   __dirname,
@@ -20,12 +19,12 @@ const COMMAND = 'test';
 
 // We must make sure that babel-jest is used, since we don't want to
 // have it as a devDependency for all packages using plz-cli.
-u.debug('jest config path:\n', JEST_CONFIG_PATH);
+u.debug('Jest config path: %O', JEST_CONFIG_PATH);
 const JEST_CONFIG_ARGS = ['--config', JEST_CONFIG_PATH];
 
 function setupBrowserEnvForNode () {
-  var jsdom = require('jsdom').jsdom;
-  var exposedProperties = ['window', 'navigator', 'document'];
+  const jsdom = require('jsdom').jsdom;
+  const exposedProperties = ['window', 'navigator', 'document'];
   global.document = jsdom('');
   global.window = document.defaultView;
   Object.keys(document.defaultView).forEach(property => {
@@ -68,7 +67,7 @@ module.exports = () => {
 
   const i = process.argv.findIndex(v => v === COMMAND);
   const restJestArgs = process.argv.slice(i + 1);
-  u.debug('sliced jest args:', restJestArgs);
+  u.debug('Sliced jest args: %O', restJestArgs);
 
   runJestTests(restJestArgs).catch(u.unhandledError);
 };

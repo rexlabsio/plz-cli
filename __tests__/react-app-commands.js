@@ -27,7 +27,7 @@ describe('react-app', () => {
       'create',
       PROJECT_NAME,
       TEST_OUTPUT_PATH,
-      '--type',
+      '--project-type',
       'react-app'
     ]);
     await expect(fs.readdir(PROJECT_PATH)).resolves.toMatchSnapshot();

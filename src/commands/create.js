@@ -13,44 +13,70 @@ const pify = require('pify');
 const copyTemplateDir = pify(require('copy-template-dir'));
 const path = require('path');
 const changeCase = require('change-case');
-const u = require('../libs/util');
+const isUp = require('is-up');
+const u = require('src/utils');
+const { PROJECT_TYPE_REACT_APP } = require('src/utils/constants');
 
+// HACK: Avoid Yarn from overriding registry, which may screw up private pkg access.
+const REGISTRY_DOMAIN = 'registry.npmjs.org';
+const REGISTRY_URL = `https://${REGISTRY_DOMAIN}/`;
+const FALLBACK_VERSION = 'latest';
 const TEMPLATE_PATH = u.to(__dirname, '../../templates/');
 const REACT_VERSION = u.pkg.peerDependencies.react;
 const PLZ_CLI_VERSION = '1.x';
 const PLZ_CLI_NAME = u.pkg.name;
 const POST_CREATE_MESSAGES = {
-  'react-app': ({ relDir }) =>
-    `
-  ${u.underline('Geting started:')} \`cd ${relDir} && yarn && yarn start\`
-  `.trim()
+  [PROJECT_TYPE_REACT_APP]: ({ relDir, name }) =>
+    `${u.underline('Getting started:')}\nHey ${name ||
+      'developer'}!\nRun \`${u.warn(
+      `cd ${relDir} && yarn && yarn start`
+    )}\` to begin development.`,
+  OFFLINE: `${u.underline('Note:')}\nRunning \`${u.warn(
+    'yarn upgrade-interactive'
+  )}\` in the project will pin fallback versions.`
 };
 
-const cleanBuffer = x => x.toString().trim();
-const fetchPkgVersion = (registry, pkgName) =>
+const cleanBuffer = x => (!x ? '' : x.toString().trim());
+const fetchPkgVersion = async (registry, pkgName) =>
   u.execGetOutput(`npm info ${pkgName} dist-tags.latest`, {
     stdio: 'ignore',
     env: Object.assign({}, process.env, {
       npm_config_registry: registry
     })
   });
-async function scaffold (name, targetDir, type) {
-  const templateName = changeCase.titleCase(type);
-  const spinner = u
-    .spinner(
-      `Creating "${u.bold.magenta(name)}" ${u.muted(`(${templateName})`)}`
-    )
-    .start();
-  // HACK: Avoid Yarn from overriding registry, which may screw up private pkg access.
-  let registry = 'https://registry.npmjs.org/';
+async function scaffold (name, templateName, targetDir, type, spinner) {
+  spinner.start();
+  const start = +new Date();
+  const isRegistryOnline = await isUp(REGISTRY_DOMAIN).catch(() => false);
+  if (!isRegistryOnline) {
+    const diff = +new Date() - start;
+    spinner
+      .warn(
+        u.muted.italic(
+          `Registry offline.${diff > 50
+            ? ` (timed out in ${(diff / 1000).toFixed(2)}s)`
+            : ''}`
+        )
+      )
+      .start();
+  }
   const fetchVersion = async (name, backupVersion) => {
-    const version = await fetchPkgVersion(registry, name);
+    let version;
+    if (isRegistryOnline) {
+      version = await fetchPkgVersion(REGISTRY_URL, name);
+    } else {
+      spinner
+        .info(
+          u.muted(`Fallback to "${FALLBACK_VERSION}" for ${u.underline(name)}`)
+        )
+        .start();
+    }
     return version ? `^${cleanBuffer(version)}` : backupVersion;
   };
+  const warnSpin = msg => () => spinner.warn(msg).start();
+  const infoSpin = msg => () => spinner.info(msg).start();
 
-  // First, we setup all the env vars for the template
   const optIgnore = { stdio: 'ignore' };
-
   const [
     email,
     username,
@@ -62,11 +88,36 @@ async function scaffold (name, targetDir, type) {
     pkgVerForms,
     pkgVerModelGenerator
   ] = await Promise.all([
-    u.execGetOutput('git config user.email', optIgnore).then(cleanBuffer),
-    u.execGetOutput('git config user.name', optIgnore).then(cleanBuffer),
+    u
+      .execGetOutput('git config user.email', optIgnore)
+      .catch(
+        warnSpin(
+          `Your git ${u.italic('user.email')} isn't configured? ${u.emoji(
+            '😭',
+            ''
+          )}`
+        )
+      )
+      .then(cleanBuffer),
+    u
+      .execGetOutput('git config user.name', optIgnore)
+      .catch(
+        warnSpin(
+          `Your git ${u.italic('user.name')} isn't configured? ${u.emoji(
+            '😭',
+            ''
+          )}`
+        )
+      )
+      .then(cleanBuffer),
     u
       .execGetOutput('git config remote.origin.url', optIgnore)
-      .catch(() => 'FILL_IN_LATER')
+      .catch(() => {
+        infoSpin(
+          'After initializing git update the "repo" field in package.json'
+        )();
+        return 'FILL_IN_LATER';
+      })
       .then(cleanBuffer),
     fetchVersion('@rexlabs/styling', '1.x'),
     fetchVersion('@rexlabs/api-client', '2.x'),
@@ -109,45 +160,54 @@ async function scaffold (name, targetDir, type) {
       `Cannot access template \`${templatePath}\`:\n${err.message}`
     );
   } else {
-    const relDir = path.relative(process.cwd(), targetDir);
+    const relDir = u.cwdRel(targetDir);
     await copyTemplateDir(templatePath, targetDir, vars);
     spinner.succeed(
       `Created "${u.bold.magenta(relDir)}" ${u.muted(`(${templateName})`)}`
     );
 
+    const logPostMessage = msg => {
+      const [head, ...lines] = msg.split('\n');
+      console.log(`\n  ${head}\n\n${lines.map(l => `    ${l}`).join('\n')}`);
+    };
     if (type in POST_CREATE_MESSAGES) {
-      console.log(
-        '\n  ' +
-          POST_CREATE_MESSAGES[type]({ relDir })
-            .split('\n')
-            .join('\n  ')
-      );
+      logPostMessage(POST_CREATE_MESSAGES[type]({ relDir, name: username }));
+    }
+    if (!isRegistryOnline) {
+      logPostMessage(POST_CREATE_MESSAGES.OFFLINE);
     }
   }
 }
 
-async function runScaffoldCommand ({ name, rootPath = '', type }) {
+async function runScaffoldCommand ({ name, rootDir = '', type }) {
   if (!name) {
     console.error(new Error('Missing a valid package name.'));
     process.exit(1);
   }
   const packageName = changeCase.paramCase(name);
-  u.debug('name:     ', packageName);
-  u.debug('rootPath: ', rootPath);
-  u.debug('type:     ', type);
+  const templateName = changeCase.titleCase(type);
+  u.debug('"name":     %o', packageName);
+  u.debug('"templateName":     %o', templateName);
+  u.debug('"rootDir":  %o', rootDir);
+  u.debug('"type":     %o', type);
 
-  const rootDir = u.cwdTo(rootPath);
-  const packageDir = u.cwdTo(rootPath, packageName);
+  const rootDirRel = u.cwdTo(rootDir);
+  const packageDir = u.cwdTo(rootDirRel, packageName);
+  const spinner = u.spinner(
+    `Creating "${u.bold.magenta(name)}" ${u.muted(`(${templateName})`)}`
+  );
 
-  const err = await u.getWriteError(rootDir);
+  const err = await u.getWriteError(rootDirRel);
   if (err) {
     throw new Error(
-      `Cannot write to root directory \`${rootDir}\`:\n${err.message}`
+      `Cannot write to root directory \`${rootDirRel}\`:\n${err.message}`
     );
   } else {
     try {
-      await scaffold(packageName, packageDir, type);
+      await scaffold(packageName, templateName, packageDir, type, spinner);
     } catch (err) {
+      spinner.stop();
+      spinner.clear();
       console.error(`${u.error(`Error creating ${packageName} package.`)}`);
       console.log();
       console.error(err);

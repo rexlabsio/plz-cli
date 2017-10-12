@@ -1,8 +1,5 @@
 import PropTypes from 'prop-types';
 import PropVal from '@storybook/addon-info/dist/components/PropVal';
-import pkg from 'pkg-json';
-import monorepopkg from 'monorepo-pkg-json';
-import getCliConfig from '../../libs/parse-config';
 
 /*
 |-------------------------------------------------------------------------------
@@ -10,20 +7,8 @@ import getCliConfig from '../../libs/parse-config';
 |-------------------------------------------------------------------------------
 */
 export function loadStorybookConfig () {
-  const localPkgImplicitConf = {
-    url: (pkg && pkg.homepage) || undefined,
-    name: `${(pkg && pkg.name) || 'Component'}`
-  };
-
-  const localPkgConf = getCliConfig(pkg).storybook;
-  const monoRepoPkgConf = getCliConfig(monorepopkg).storybook;
-
-  return Object.assign(
-    {},
-    monoRepoPkgConf,
-    localPkgImplicitConf,
-    localPkgConf
-  );
+  // Because we're in the browser, this is now an object.
+  return process.env.CLI_STORYBOOK_OPTIONS;
 }
 
 /*

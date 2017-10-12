@@ -27,7 +27,7 @@ describe('module (node)', () => {
       'create',
       PROJECT_NAME,
       TEST_OUTPUT_PATH,
-      '--type',
+      '--project-type',
       'module'
     ]);
     await expect(fs.readdir(PROJECT_PATH)).resolves.toMatchSnapshot();
