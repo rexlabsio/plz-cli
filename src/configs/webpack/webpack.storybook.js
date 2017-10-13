@@ -27,12 +27,12 @@ const _ = require('lodash');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const pkgUp = require('read-pkg-up');
-const loadCliConfig = require('src/utils/load-cli-config');
+const loadCliConfig = require('../../utils/load-cli-config');
 const {
   PROJECT_TYPE_REACT_COMPONENT,
   PROJECT_TYPE_MODULE,
   PROJECT_TYPE_REACT_APP
-} = require('src/utils/constants');
+} = require('../../utils/constants');
 
 module.exports = function (storybookBaseConfig) {
   process.env.NODE_ENV = 'production';
@@ -42,11 +42,11 @@ module.exports = function (storybookBaseConfig) {
   switch (projectType) {
     case PROJECT_TYPE_MODULE:
     case PROJECT_TYPE_REACT_COMPONENT:
-      cliConfig = require('src/configs/project/module')();
+      cliConfig = require('../../configs/project/module')();
       break;
     case PROJECT_TYPE_REACT_APP:
       // Makes sure our babel configs aren't geared for HMR
-      cliConfig = require('src/configs/project/app')({ isBaseOnly: true });
+      cliConfig = require('../../configs/project/app')({ isBaseOnly: true });
       break;
     default:
       throw new Error(
@@ -140,7 +140,7 @@ function dropPluginsHandledByPlz (conf) {
   ];
   const replacementPlugins = {
     // Storybook doesn't use newest uglify, which supports esnext
-    UglifyJsPlugin: require('src/configs/webpack/parts/plugins').uglify()
+    UglifyJsPlugin: require('../../configs/webpack/parts/plugins').uglify()
   };
 
   conf.plugins = conf.plugins.reduce((plugins, plugin) => {

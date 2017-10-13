@@ -37,15 +37,15 @@ function cliConfigFromArgv (argv) {
 }
 
 function applyFallbackProjectType (config) {
-  const u = require('src/utils');
-  const defaultProjectType = require('src/configs/project/defaults/base')
+  const u = require('../utils');
+  const defaultProjectType = require('../configs/project/defaults/base')
     .projectType;
   u.debug(`Project type falling back to "${defaultProjectType}"`);
   config.projectType = defaultProjectType;
 }
 
 function throwInvalidProjectType (config, TYPES) {
-  const u = require('src/utils');
+  const u = require('../utils');
   const typeMsg = `Given type: "${u.error(config.projectType)}"`;
   const headMsg =
     'Project type needs to be configured to one of the following:';
@@ -69,13 +69,13 @@ function loadCliConfig () {
   const path = require('path');
   const cosmiconfig = require('cosmiconfig');
   const merge = require('webpack-merge');
-  const u = require('src/utils');
+  const u = require('../utils');
   const {
     CLI_NAME,
     PROJECT_TYPE_MODULE,
     PROJECT_TYPE_REACT_COMPONENT,
     PROJECT_TYPE_REACT_APP
-  } = require('src/utils/constants');
+  } = require('../utils/constants');
   const START_CONFIG_LOOKUP_DIR = path.resolve(process.cwd());
   const STOP_CONFIG_LOOKUP_DIR = path.resolve(process.cwd(), '../../'); // For monorepo's!
   const explorer = cosmiconfig(CLI_NAME, {
@@ -120,7 +120,7 @@ function loadCliConfig () {
   u.debug('All loaded config: %O', config);
   if (!config.projectType) {
     if (config.type) {
-      require('src/utils').pushDeprecation(
+      require('../utils').pushDeprecation(
         'The \'type\' option has been renamed to \'projectType\''
       );
     }

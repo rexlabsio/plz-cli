@@ -1,6 +1,6 @@
 const merge = require('webpack-merge');
-const rules = require('src/configs/webpack/parts/rules');
-const pluginPresets = require('src/configs/webpack/parts/plugin-presets');
+const rules = require('../../configs/webpack/parts/rules');
+const pluginPresets = require('../../configs/webpack/parts/plugin-presets');
 
 const parts = {
   base: ({ babel } = {}) => ({

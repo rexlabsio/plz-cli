@@ -1,4 +1,4 @@
-const u = require('src/utils');
+const u = require('../../../utils');
 
 module.exports = {
   base: () => ({

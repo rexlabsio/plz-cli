@@ -370,7 +370,7 @@ function registerCommand (yargs, cmdConf, desc, builder, descMore) {
     logDeprecations();
 
     // NOTE: Require the commands dynamically to dramatically improve bootup perf.
-    require('src/commands/' + cmdFileName)(argv);
+    require('../commands/' + cmdFileName)(argv);
   }
 
   function usageBuilder (yargs) {

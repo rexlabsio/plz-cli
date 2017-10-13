@@ -21,9 +21,9 @@ const { prepareUrls } = require('react-dev-utils/WebpackDevServerUtils');
 const openBrowser = require('react-dev-utils/openBrowser');
 const express = require('express');
 const webpack = require('webpack');
-const u = require('src/utils');
-const loadCliConfig = require('src/utils/load-cli-config');
-const { DEFAULT_PORT, DEFAULT_HOST } = require('src/utils/constants');
+const u = require('../utils');
+const loadCliConfig = require('../utils/load-cli-config');
+const { DEFAULT_PORT, DEFAULT_HOST } = require('../utils/constants');
 
 function devServer (webpackConfig, { fallback, host, lanHost, port }) {
   let app = express();
@@ -104,7 +104,7 @@ module.exports = argv => {
         serverConfig.host === DEFAULT_HOST ? '0.0.0.0' : serverConfig.host,
         serverConfig.port
       );
-      const webpackConfig = require('src/configs/project/app')({
+      const webpackConfig = require('../configs/project/app')({
         reload: argv.reload,
         status: {
           message: `  The app is running at:

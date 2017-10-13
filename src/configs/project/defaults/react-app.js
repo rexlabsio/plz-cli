@@ -10,7 +10,7 @@
 |
 */
 
-const { PROJECT_TYPE_REACT_APP } = require('src/utils/constants');
+const { PROJECT_TYPE_REACT_APP } = require('../../../utils/constants');
 
 const plzReactAppConfigDefault = {
   projectType: PROJECT_TYPE_REACT_APP,

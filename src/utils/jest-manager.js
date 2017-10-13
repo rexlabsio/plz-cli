@@ -8,7 +8,7 @@
 */
 
 const path = require('path');
-const u = require('src/utils');
+const u = require('../utils');
 
 const JEST_CLI_PATH = u.to(__dirname, '../../node_modules/.bin');
 const JEST_CLI_BIN_PATH = path.join(JEST_CLI_PATH, 'jest');

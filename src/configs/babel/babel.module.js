@@ -1,5 +1,5 @@
 const merge = require('webpack-merge');
-const babelBaseConfig = require('src/configs/babel/babel.base');
+const babelBaseConfig = require('../../configs/babel/babel.base');
 
 const babelModuleConfig = {};
 

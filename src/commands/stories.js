@@ -26,14 +26,14 @@ const chalk = require('chalk');
 const pify = require('pify');
 const fs = require('fs-extra');
 const glob = pify(require('glob'));
-const u = require('src/utils');
-const loadCliConfig = require('src/utils/load-cli-config');
+const u = require('../utils');
+const loadCliConfig = require('../utils/load-cli-config');
 const {
   DEFAULT_PORT,
   PROJECT_TYPE_REACT_APP,
   PROJECT_TYPE_REACT_COMPONENT,
   PROJECT_TYPE_MODULE
-} = require('src/utils/constants');
+} = require('../utils/constants');
 
 let tempFiles = [];
 
@@ -114,12 +114,12 @@ async function writeBabelRc (projectType) {
   let babelConfig;
   switch (projectType) {
     case PROJECT_TYPE_REACT_APP:
-      babelConfig = require('src/configs/project/app')({ isBaseOnly: true })
+      babelConfig = require('../configs/project/app')({ isBaseOnly: true })
         .babel;
       break;
     case PROJECT_TYPE_REACT_COMPONENT:
     case PROJECT_TYPE_MODULE:
-      babelConfig = require('src/configs/project/module')().babel;
+      babelConfig = require('../configs/project/module')().babel;
       break;
     default:
       break;

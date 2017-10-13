@@ -8,7 +8,7 @@
 */
 
 const path = require('path');
-const u = require('src/utils');
+const u = require('../utils');
 
 const JEST_CONFIG_PATH = path.resolve(
   __dirname,

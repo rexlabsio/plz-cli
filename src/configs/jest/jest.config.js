@@ -11,8 +11,8 @@
 */
 
 const path = require('path');
-const u = require('src/utils');
-const aliases = require('src/configs/webpack/parts/aliases');
+const u = require('../../utils');
+const aliases = require('../../configs/webpack/parts/aliases');
 const { assign, keys } = Object;
 
 /*

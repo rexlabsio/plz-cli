@@ -21,7 +21,7 @@ const middlewareDefaults = {
 };
 
 function mergeUserConfig (ourConfig) {
-  const userConfig = require('src/utils/load-cli-config')();
+  const userConfig = require('../utils/load-cli-config')();
   /*
   |-----------------------------------------------------------------------------
   | Default the values of the user's config to our own, making sure that the

@@ -7,7 +7,7 @@
 |
 */
 
-const { PROJECT_TYPE_MODULE } = require('src/utils/constants');
+const { PROJECT_TYPE_MODULE } = require('../../../utils/constants');
 
 const plzModuleConfigDefault = {
   projectType: PROJECT_TYPE_MODULE

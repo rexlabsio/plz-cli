@@ -1,4 +1,4 @@
-const u = require('src/utils');
+const u = require('../../../utils');
 
 /**
  * Display current build status for a Webpack watch build.

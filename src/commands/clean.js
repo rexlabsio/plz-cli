@@ -9,14 +9,14 @@
 
 const fse = require('fs-extra');
 const changeCase = require('change-case');
-const u = require('src/utils');
-const loadCliConfig = require('src/utils/load-cli-config');
+const u = require('../utils');
+const loadCliConfig = require('../utils/load-cli-config');
 const {
   PROJECT_TYPE_REACT_APP,
   PROJECT_TYPE_REACT_COMPONENT,
   PROJECT_TYPE_MODULE,
   PACKAGE_OUTPUT_DIRECTORIES
-} = require('src/utils/constants');
+} = require('../utils/constants');
 
 async function removeModuleBundles ({ buildDir, logRemovalSuccess } = {}) {
   let didClean = false;
@@ -72,10 +72,10 @@ module.exports = () => {
   switch (projectType) {
     case PROJECT_TYPE_MODULE:
     case PROJECT_TYPE_REACT_COMPONENT:
-      cliConfig = require('src/configs/project/module')();
+      cliConfig = require('../configs/project/module')();
       break;
     case PROJECT_TYPE_REACT_APP:
-      cliConfig = require('src/configs/project/app')({ isBaseOnly: true });
+      cliConfig = require('../configs/project/app')({ isBaseOnly: true });
       break;
     default:
       throw new Error(

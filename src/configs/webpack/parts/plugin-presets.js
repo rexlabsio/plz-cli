@@ -1,4 +1,4 @@
-const plugins = require('src/configs/webpack/parts/plugins');
+const plugins = require('../../../configs/webpack/parts/plugins');
 
 const pluginPresets = {};
 

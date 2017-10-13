@@ -1,8 +1,8 @@
 const merge = require('webpack-merge');
-const u = require('src/utils');
-const rules = require('src/configs/webpack/parts/rules');
-const aliases = require('src/configs/webpack/parts/aliases');
-const pluginPresets = require('src/configs/webpack/parts/plugin-presets');
+const u = require('../../utils');
+const rules = require('../../configs/webpack/parts/rules');
+const aliases = require('../../configs/webpack/parts/aliases');
+const pluginPresets = require('../../configs/webpack/parts/plugin-presets');
 
 const parts = {
   base: ({ babel } = {}) => ({
@@ -30,7 +30,7 @@ const parts = {
 
   dev: ({ status, reload } = {}) => ({
     entry: [
-      require.resolve('src/configs/webpack/parts/polyfill.js'),
+      require.resolve('../../configs/webpack/parts/polyfill.js'),
       `${require.resolve('webpack-hot-middleware/client')}${reload
         ? '?reload=true'
         : ''}`,
@@ -62,7 +62,7 @@ const parts = {
     return {
       entry: {
         app: [
-          require.resolve('src/configs/webpack/parts/polyfill.js'),
+          require.resolve('../../configs/webpack/parts/polyfill.js'),
           u.cwdTo('src/index.js')
         ]
       },

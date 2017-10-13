@@ -1,14 +1,14 @@
 const _ = require('lodash');
-const mergeUserConfig = require('src/utils/merge-user-config');
-const baseConfig = require('src/configs/project/defaults/base');
-const defaultConfig = require('src/configs/project/defaults/react-app');
+const mergeUserConfig = require('../../utils/merge-user-config');
+const baseConfig = require('../../configs/project/defaults/base');
+const defaultConfig = require('../../configs/project/defaults/react-app');
 
 const ourConfig = ({ isBaseOnly, isBuild, status, reload, output } = {}) =>
   _.defaultsDeep(
     {
-      babel: () => require('src/configs/babel/babel.app')(),
+      babel: () => require('../../configs/babel/babel.app')(),
       webpack: ({ babel } = {}) =>
-        require('src/configs/webpack/webpack.app')({
+        require('../../configs/webpack/webpack.app')({
           babel,
           isBaseOnly,
           isBuild,
@@ -17,9 +17,9 @@ const ourConfig = ({ isBaseOnly, isBuild, status, reload, output } = {}) =>
           output
         }),
       storybook: {
-        babel: () => require('src/configs/babel/babel.app')(),
+        babel: () => require('../../configs/babel/babel.app')(),
         webpack: ({ webpack } = {}) =>
-          require('src/configs/webpack/webpack.storybook')({
+          require('../../configs/webpack/webpack.storybook')({
             baseWebpack: webpack
           })
       }

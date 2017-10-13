@@ -40,16 +40,16 @@ if (require.main !== module) {
   };
 } else {
   // Otherwise, we execute this file as a CLI
-  const cli = require('src/cli-init');
-  const loadCliConfig = require('src/utils/load-cli-config');
-  const Reporting = require('src/utils/reporting');
+  const cli = require('./src/cli-init');
+  const loadCliConfig = require('./src/utils/load-cli-config');
+  const Reporting = require('./src/utils/reporting');
 
   // Setup reporting
   const reporting = new Reporting(startTime);
 
   // Register exit hook
   process.on('exit', () => {
-    const u = require('src/utils');
+    const u = require('./src/utils');
     reporting.stop();
     const { totalTime, peakMB } = reporting.report();
     totalTime &&

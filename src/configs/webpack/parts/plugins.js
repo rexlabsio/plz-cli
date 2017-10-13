@@ -6,9 +6,9 @@ const StatsPlugin = require('stats-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const Md5HashPlugin = require('webpack-md5-hash');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-const u = require('src/utils');
-const StatusPlugin = require('src/configs/webpack/plugins/status-plugin');
-const InjectManifestPlugin = require('src/configs/webpack/plugins/inject-manifest-plugin.js');
+const u = require('../../../utils');
+const StatusPlugin = require('../../../configs/webpack/plugins/status-plugin');
+const InjectManifestPlugin = require('../../../configs/webpack/plugins/inject-manifest-plugin.js');
 
 let plugins = {};
 

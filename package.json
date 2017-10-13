@@ -18,9 +18,7 @@
     "test": "jest -u --testPathPattern \"$(pwd)/__tests__\"",
     "test:watch": "jest --watch -u --testPathPattern \"$(pwd)/__tests__\"",
     "ascii": "./support/generate-ascii-logo.js",
-    "update-readme": "./support/inject-help-to-readme.js",
-    "link-src": "cd node_modules && ln -nsf ../src",
-    "postinstall": "npm run link-src"
+    "update-readme": "./support/inject-help-to-readme.js"
   },
   "author": "Rex Software <lochlan.bunn@rexsoftware.com.au>",
   "repository": "git@github.com:rexlabsio/vivid.git",

@@ -14,8 +14,8 @@ const copyTemplateDir = pify(require('copy-template-dir'));
 const path = require('path');
 const changeCase = require('change-case');
 const isUp = require('is-up');
-const u = require('src/utils');
-const { PROJECT_TYPE_REACT_APP } = require('src/utils/constants');
+const u = require('../utils');
+const { PROJECT_TYPE_REACT_APP } = require('../utils/constants');
 
 // HACK: Avoid Yarn from overriding registry, which may screw up private pkg access.
 const REGISTRY_DOMAIN = 'registry.npmjs.org';
@@ -23,7 +23,10 @@ const REGISTRY_URL = `https://${REGISTRY_DOMAIN}/`;
 const FALLBACK_VERSION = 'latest';
 const TEMPLATE_PATH = u.to(__dirname, '../../templates/');
 const REACT_VERSION = u.pkg.peerDependencies.react;
-const PLZ_CLI_VERSION = '1.x';
+const PLZ_CLI_VERSION = u.pkg.version.replace(
+  /(\d)\..*/,
+  ([major]) => `${major}.x`
+);
 const PLZ_CLI_NAME = u.pkg.name;
 const POST_CREATE_MESSAGES = {
   [PROJECT_TYPE_REACT_APP]: ({ relDir, name }) =>

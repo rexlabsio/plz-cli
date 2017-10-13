@@ -13,14 +13,14 @@ const fs = pify(require('fs'));
 const fse = require('fs-extra');
 const changeCase = require('change-case');
 const merge = require('webpack-merge');
-const u = require('src/utils');
-const loadCliConfig = require('src/utils/load-cli-config');
+const u = require('../utils');
+const loadCliConfig = require('../utils/load-cli-config');
 const {
   PROJECT_TYPE_REACT_APP,
   PROJECT_TYPE_REACT_COMPONENT,
   PROJECT_TYPE_MODULE,
   PACKAGE_OUTPUT_DIRECTORIES
-} = require('src/utils/constants');
+} = require('../utils/constants');
 
 const BABEL_EXEC_ARGS = [
   {
@@ -62,7 +62,7 @@ function babelBuild (outDir) {
 async function buildModule ({ name } = {}) {
   const merge = require('webpack-merge');
   const getBabelConfig = ({ modulesType } = {}) =>
-    require('src/configs/project/module')({ modulesType }).babel;
+    require('../configs/project/module')({ modulesType }).babel;
 
   const buildMain = () => {
     const babelBaseConfig = getBabelConfig({ modulesType: 'commonjs' });
@@ -99,7 +99,7 @@ async function buildModule ({ name } = {}) {
 async function getAppCompiler (output) {
   const webpack = require('webpack');
   const getWebpackConfig = ({ modulesType } = {}) =>
-    require('src/configs/project/app')({
+    require('../configs/project/app')({
       isBuild: true,
       output: output
     }).webpack;

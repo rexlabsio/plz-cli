@@ -24,8 +24,8 @@ function loadCliCommands () {
     PROJECT_TYPE_REACT_APP,
     PROJECT_TYPE_REACT_COMPONENT,
     PROJECT_TYPE_MODULE
-  } = require('src/utils/constants');
-  const u = require('src/utils');
+  } = require('./utils/constants');
+  const u = require('./utils');
   u.loadYargsColors();
   const yargs = require('yargs');
   u.setGlobalArgv(yargs.argv);
@@ -194,7 +194,7 @@ function hasHitImplicitCommand (cli, cmd) {
 
 function parseCommand (cli) {
   /* Load modules when we hit the hot code. */
-  const u = require('src/utils');
+  const u = require('./utils');
   const changeCase = require('change-case');
 
   if (hasHitImplicitCommand(cli, 'help-all')) {
@@ -233,7 +233,7 @@ function parseCommand (cli) {
     };
 
     // Format all the storybook optional commands as: --storybook-<some-option>
-    _.forEach(require('src/configs/project-defaults/base'), (val, key) => {
+    _.forEach(require('./configs/project-defaults/base'), (val, key) => {
       if (key === 'storybook') {
         _.forEach(val, (x, y) => registerProjArg(x, `${key}-${y}`));
       } else {
@@ -247,7 +247,7 @@ function parseCommand (cli) {
 
   if (hasHitImplicitCommand(cli, 'help-jest')) {
     u.debug('Hit help-jest');
-    const jest = require('src/utils/jest-manager');
+    const jest = require('./utils/jest-manager');
     jest.showHelp().then(() => {
       process.exit(0);
     });

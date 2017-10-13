@@ -12,13 +12,13 @@
 */
 
 const babelJest = require('babel-jest');
-const u = require('src/utils');
-const loadCliConfig = require('src/utils/load-cli-config');
+const u = require('../../utils');
+const loadCliConfig = require('../../utils/load-cli-config');
 const {
   PROJECT_TYPE_MODULE,
   PROJECT_TYPE_REACT_COMPONENT,
   PROJECT_TYPE_REACT_APP
-} = require('src/utils/constants');
+} = require('../../utils/constants');
 
 const { projectType } = loadCliConfig();
 
@@ -26,10 +26,10 @@ let cliConfig = null;
 switch (projectType) {
   case PROJECT_TYPE_MODULE:
   case PROJECT_TYPE_REACT_COMPONENT:
-    cliConfig = require('src/configs/project/module')();
+    cliConfig = require('../../configs/project/module')();
     break;
   case PROJECT_TYPE_REACT_APP:
-    cliConfig = require('src/configs/project/app')({ isBaseOnly: true });
+    cliConfig = require('../../configs/project/app')({ isBaseOnly: true });
     break;
   default:
     throw new Error(
@@ -39,7 +39,7 @@ switch (projectType) {
 
 const jestBabelConfig = Object.assign(
   {},
-  require('src/configs/babel/babel.base')()
+  require('../../configs/babel/babel.base')()
 );
 const transform = babelJest.createTransformer(jestBabelConfig);
 const plzTransform = Object.assign({}, transform);

@@ -13,5 +13,7 @@
 */
 
 module.exports = function (storybookBaseConfig) {
-  return require('src/configs/webpack/webpack.storybook')(storybookBaseConfig);
+  return require('../../configs/webpack/webpack.storybook')(
+    storybookBaseConfig
+  );
 };
