@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.0.3"></a>
+## [2.0.3](https://github.com/rexlabsio/vivid/compare/@rexlabs/plz-cli@2.0.2...@rexlabs/plz-cli@2.0.3) (2017-10-20)
+
+
+### Bug Fixes
+
+* Remove reference to Heidi in project templates ([7146e34](https://github.com/rexlabsio/vivid/commit/7146e34))
+
+
+
+
 <a name="2.0.2"></a>
 ## [2.0.2](https://github.com/rexlabsio/vivid/compare/@rexlabs/plz-cli@2.0.1...@rexlabs/plz-cli@2.0.2) (2017-10-13)
 
