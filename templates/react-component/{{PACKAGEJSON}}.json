@@ -2,9 +2,9 @@
   "name": "@rexlabs/{{SLUGGED_NAME}}",
   "repository": "{{GIT_REMOTE_URL}}",
   "version": "1.0.0",
-  "description": "{{TITLE_NAME}} - Heidi Component",
+  "description": "{{TITLE_NAME}} - Vivid Component",
   "main": "lib/index.js",
-  "module": "es/index.js",
+  "module": "module/index.js",
   "plz:main": "src/index.js",
   "files": [
     "lib",
@@ -34,7 +34,7 @@
   "license": "UNLICENSED",
   "keywords": [
     "react-component",
-    "heidi-component"
+    "vivid-package"
   ],
   "plz": {
     "type": "react-component"

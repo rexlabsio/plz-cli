@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "{{TITLE_NAME}}",
   "main": "lib/index.js",
-  "module": "es/index.js",
+  "module": "module/index.js",
   "plz:main": "src/index.js",
   "files": [
     "lib",
@@ -26,7 +26,9 @@
   },
   "author": "Rex Software{{HAS_AUTHOR_EMAIL}}{{AUTHOR_EMAIL}}",
   "license": "UNLICENSED",
-  "keywords": [],
+  "keywords": [
+    "vivid-package"
+  ],
   "plz": {
     "type": "module"
   }
