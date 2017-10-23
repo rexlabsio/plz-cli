@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.1.0"></a>
+# [2.1.0](https://github.com/rexlabsio/vivid/compare/@rexlabs/plz-cli@2.0.3...@rexlabs/plz-cli@2.1.0) (2017-10-23)
+
+
+### Features
+
+* **plz-cli:** Add proxy config to `server` command ([8607502](https://github.com/rexlabsio/vivid/commit/8607502))
+
+
+
+
 <a name="2.0.3"></a>
 ## [2.0.3](https://github.com/rexlabsio/vivid/compare/@rexlabs/plz-cli@2.0.2...@rexlabs/plz-cli@2.0.3) (2017-10-20)
 
