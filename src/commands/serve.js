@@ -12,24 +12,43 @@
 //  the webpack config according to the environment (e.g. source maps)
 process.env.NODE_ENV = 'development';
 
-const pify = require('pify');
-const detect = pify(require('detect-port'));
-const address = require('address');
-const inquirer = require('inquirer');
-const historyAPIFallback = require('connect-history-api-fallback');
-const { prepareUrls } = require('react-dev-utils/WebpackDevServerUtils');
-const openBrowser = require('react-dev-utils/openBrowser');
-const express = require('express');
-const webpack = require('webpack');
+const _ = require('lodash');
 const u = require('../utils');
 const loadCliConfig = require('../utils/load-cli-config');
 const { DEFAULT_PORT, DEFAULT_HOST } = require('../utils/constants');
 
-function devServer (webpackConfig, { fallback, host, lanHost, port }) {
+function devServer ({
+  webpackConfig,
+  proxyConfig,
+  fallback,
+  host,
+  lanHost,
+  port
+}) {
+  u.debug('Configuring Dev Server');
+  const express = require('express');
+  const webpack = require('webpack');
+
   let app = express();
   let compiler = webpack(webpackConfig);
 
+  if (proxyConfig) {
+    const proxy = require('http-proxy-middleware');
+
+    const PROXY_DEFAULT_OPTIONS = {
+      changeOrigin: true,
+      ws: true,
+      logLevel: 'silent'
+    };
+    _.forEach(proxyConfig, (options, path) => {
+      const config = Object.assign({}, PROXY_DEFAULT_OPTIONS, options);
+      app.use(proxy(path, config));
+      u.debug('Registered proxy: %O -> %O', path, options.target);
+    });
+  }
+
   if (fallback !== false) {
+    const historyAPIFallback = require('connect-history-api-fallback');
     app.use(historyAPIFallback());
   }
 
@@ -70,6 +89,11 @@ function portPrompt (suggestedPort) {
 }
 
 async function getServerOptions (argv) {
+  const pify = require('pify');
+  const detect = pify(require('detect-port'));
+  const address = require('address');
+  const inquirer = require('inquirer');
+
   const host = argv.host || DEFAULT_HOST;
   const lanHost = address.ip();
   let port = argv.port || DEFAULT_PORT;
@@ -95,6 +119,7 @@ async function getServerOptions (argv) {
 module.exports = argv => {
   Promise.all([loadCliConfig(), getServerOptions(argv)])
     .then(([cliConfig, serverConfig]) => {
+      const { prepareUrls } = require('react-dev-utils/WebpackDevServerUtils');
       const {
         lanUrlForTerminal,
         localUrlForTerminal,
@@ -104,7 +129,10 @@ module.exports = argv => {
         serverConfig.host === DEFAULT_HOST ? '0.0.0.0' : serverConfig.host,
         serverConfig.port
       );
-      const webpackConfig = require('../configs/project/app')({
+      const {
+        webpack: webpackConfig,
+        proxy: proxyConfig
+      } = require('../configs/project/app')({
         reload: argv.reload,
         status: {
           message: `  The app is running at:
@@ -114,12 +142,14 @@ module.exports = argv => {
 ${u.emoji('🏃', '')}`,
           initialTime: process.env.CLI_START_TIME,
           initialCompile: () => {
-            openBrowser(localUrlForBrowser);
+            require('react-dev-utils/openBrowser')(localUrlForBrowser);
           }
         }
-      }).webpack;
+      });
 
-      devServer(webpackConfig, {
+      devServer({
+        webpackConfig,
+        proxyConfig,
         fallback: argv.fallback,
         ...serverConfig
       });

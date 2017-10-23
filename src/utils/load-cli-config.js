@@ -46,9 +46,6 @@ function applyFallbackProjectType (config) {
 
 function throwInvalidProjectType (config, TYPES) {
   const u = require('../utils');
-  const typeMsg = `Given type: "${u.error(config.projectType)}"`;
-  const headMsg =
-    'Project type needs to be configured to one of the following:';
   const mainListMsg = TYPES.map(x => u.dotpoint(x)).join('\n');
 
   console.error(

@@ -15,6 +15,7 @@ const { PROJECT_TYPE_REACT_APP } = require('../../../utils/constants');
 const plzReactAppConfigDefault = {
   projectType: PROJECT_TYPE_REACT_APP,
   buildDir: './public',
-  runtimeCompilation: false
+  runtimeCompilation: false,
+  proxy: {}
 };
 module.exports = plzReactAppConfigDefault;

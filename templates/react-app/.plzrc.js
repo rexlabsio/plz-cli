@@ -1,5 +1,5 @@
 module.exports = {
-  type: "react-app",
+  projectType: "react-app",
   storybook: {
     name: "{{TITLE_NAME}}"
   }

@@ -134,6 +134,7 @@ Config for the `plz` 🙏 cli is resolved from established configuration files [
 | `projectType` | One of the follow types:<br/>`react-app`, `react-component`, `react-module` |
 | `buildDir` | The location of your project's build output.<br/><br/>For apps this is `public/`.<br/><br/>For modules this is at the root because modules output several bundle directories of their own:<br/><ul><li>`lib` (cjs)</li><li>`module/` (esm)</li></ul> |
 | `runtimeCompilation` | When enabled, packages found in `node_modules/` that have a `package.json` `plz:main` field will be compiled & watched with Babel. |
+| `proxy` | A map of [proxy](#proxy-config) configs. |
 | `storybook` | All options for Storybook's runtime. _See [@storybook/addon-options][storybookoptions] for more details._<br/><br/><blockquote>Additionally, `babel` and `webpack` properties can will defined, following the rules of the other config middleware.</blockquote> |
 | `babel` | Middleware for the [Babel config][babelconfig] of the project. See the [Example Config](#example-config) for more details. |
 | `webpack` | Middleware for the [Webpack config][webpackconfig] of the project. See the [Example Config](#example-config) for more details. |
@@ -159,6 +160,9 @@ module.exports = {
   projectType: "react-app",
   buildDir: './app-build',
   runtimeCompilation: true,
+  proxy: {
+      '/api/v1': { target: 'http://localhost:8080' }
+  },
   storybook: {
     url: ,
     goFullScreen: false,
@@ -178,6 +182,35 @@ module.exports = {
   }
 }
 ```
+
+### Proxy Config
+
+Cross Origin issues are a pain that we usually encounter in development environments.
+
+* A local API server uses another domain or port
+  _Not an issue if you have [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) setup!_
+* A local server might be hosting an embedded frame
+
+To this goal, you can route requests through the App's Webpack Dev Server instance, by matching a request's `path` to a `domain`.
+
+The extent of configuration is better explained in the underlying [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware), but common configuration is covered below.
+
+`.plzrc.js`
+```js
+module.exports = {
+  proxy: {
+    {
+      '/api/v1': { target: 'http://localhost:8080' } /*
+       \_____/    \_______________________________/
+          |                     |
+       context               options                  */
+    }
+  }
+}
+```
+
+This will proxy the following shaped requests from the Webpack Dev Server to the "target" and back:
+- `http://localhost:3000/api/v1/accounts` **➞** `http://localhost:8080/api/v1/accounts`.
 
 ## Contributing
 

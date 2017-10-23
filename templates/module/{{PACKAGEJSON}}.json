@@ -30,6 +30,6 @@
     "vivid-package"
   ],
   "plz": {
-    "type": "module"
+    "projectType": "module"
   }
 }

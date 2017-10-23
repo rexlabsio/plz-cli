@@ -37,6 +37,6 @@
     "vivid-package"
   ],
   "plz": {
-    "type": "react-component"
+    "projectType": "react-component"
   }
 }
