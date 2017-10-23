@@ -187,7 +187,7 @@ module.exports = {
 
 Cross Origin issues are a pain that we usually encounter in development environments.
 
-* A local API server uses another domain or port
+* A local API server uses another domain or port  
   _Not an issue if you have [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) setup!_
 * A local server might be hosting an embedded frame
 
