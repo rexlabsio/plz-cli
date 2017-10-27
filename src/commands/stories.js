@@ -30,6 +30,7 @@ const u = require('../utils');
 const loadCliConfig = require('../utils/load-cli-config');
 const {
   DEFAULT_PORT,
+  DEFAULT_HOST,
   PROJECT_TYPE_REACT_APP,
   PROJECT_TYPE_REACT_COMPONENT,
   PROJECT_TYPE_MODULE
@@ -188,10 +189,15 @@ async function start ({ rootDir, outputDir }) {
     | Start a storybook server.
     |---------------------------------------------------------------------------
     */
-    const detectPort = require('detect-port');
+    const detectPort = require('../utils/detect-port');
     await checkStorybookExists(STORYBOOK_SERVER_BIN_PATH);
-    const port = await detectPort(DEFAULT_PORT);
-    const args = STORYBOOK_ARGS.concat(['--port', port]).join(' ');
+    const port = await detectPort(DEFAULT_PORT, DEFAULT_HOST);
+    const args = STORYBOOK_ARGS.concat([
+      '--port',
+      port,
+      '--host',
+      DEFAULT_HOST
+    ]).join(' ');
     command = `${STORYBOOK_SERVER_BIN_PATH} ${args}`;
   }
 

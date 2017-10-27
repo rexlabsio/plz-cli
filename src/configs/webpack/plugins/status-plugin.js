@@ -57,7 +57,9 @@ class StatusPlugin {
     if (this.initial) {
       this.spinner.start(u.bold.magenta('Bootin\' up dev server!'));
     } else {
-      this.spinner.start(u.bold.magenta('Recompiling ;('));
+      this.spinner.start(
+        u.bold.magenta(`Recompiling changes, ${u.italic('plz')} wait.`)
+      );
     }
     cb();
   }
@@ -76,7 +78,7 @@ class StatusPlugin {
         stats.endTime -
         (this.initialTime ? parseInt(this.initialTime) : stats.startTime);
       this.spinner.succeed(
-        u.bold.magenta(`${this.initial ? 'Done' : 'Back'} in ${time} ms.`)
+        u.bold.magenta(`${this.initial ? 'Ready' : 'Back'} in ${time} ms.`)
       );
       if (this.initial) {
         this.initialCompile();

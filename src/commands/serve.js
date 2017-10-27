@@ -77,34 +77,42 @@ function devServer ({
   app.listen(port, lanHost, onServerStart);
 }
 
-function portPrompt (suggestedPort) {
+function portPrompt (existingPort, suggestedPort) {
   return [
     {
+      prefix: '',
       type: 'confirm',
       name: 'shouldRun',
-      message: `Would you like to run the app on another port (${suggestedPort}) instead?`,
+      message: `${u.emoji('😭')}Port :${u.error(
+        existingPort
+      )} is already being used by another program.\n\n ${u.emoji(
+        '🤔'
+      )}Port :${u.success(
+        suggestedPort
+      )} is free - would you like to run the app on it instead?`,
       default: true
     }
   ];
 }
 
 async function getServerOptions (argv) {
-  const pify = require('pify');
-  const detect = pify(require('detect-port'));
+  const detectPort = require('../utils/detect-port');
   const address = require('address');
   const inquirer = require('inquirer');
 
   const host = argv.host || DEFAULT_HOST;
   const lanHost = address.ip();
   let port = argv.port || DEFAULT_PORT;
-  const suggestedPort = await detect(port);
+  const suggestedPort = await detectPort(port, host);
 
   if (suggestedPort !== port) {
     u.clearConsole();
-    console.log(u.warn(`Something is already running on port ${port}.`));
-    console.log();
+    // console.log(u.bold.magenta(`${u.emoji('😭')}Port ${u.error(port)} is already being used.`));
+    // console.log();
 
-    const { shouldRun } = await inquirer.prompt(portPrompt(suggestedPort));
+    const { shouldRun } = await inquirer.prompt(
+      portPrompt(port, suggestedPort)
+    );
 
     if (shouldRun) {
       port = suggestedPort;
@@ -117,6 +125,7 @@ async function getServerOptions (argv) {
 }
 
 module.exports = argv => {
+  console.log(u.bold.magenta(`${u.emoji('😴')}Getting ready...`));
   Promise.all([loadCliConfig(), getServerOptions(argv)])
     .then(([cliConfig, serverConfig]) => {
       const { prepareUrls } = require('react-dev-utils/WebpackDevServerUtils');
