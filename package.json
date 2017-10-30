@@ -1,6 +1,6 @@
 {
   "name": "@rexlabs/plz-cli",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Toolkit for creating, developing building & testing projects.",
   "engines": {
     "node": ">=7.x"
@@ -26,18 +26,18 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@rexlabs/browserlist-config": "^1.0.0",
-    "@storybook/addons": "3.2.13",
-    "@storybook/channels": "3.2.13",
     "@storybook/addon-actions": "3.2.13",
     "@storybook/addon-info": "3.2.13",
     "@storybook/addon-knobs": "3.2.13",
     "@storybook/addon-options": "3.2.13",
     "@storybook/addon-storyshots": "3.2.13",
+    "@storybook/addons": "3.2.13",
+    "@storybook/channels": "3.2.13",
     "@storybook/react": "3.2.13",
     "address": "1.0.3",
     "autoprefixer": "6.7.0",
-    "babel-core": "^6.26.0",
     "babel-cli": "6.26.0",
+    "babel-core": "^6.26.0",
     "babel-jest": "^21.2.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-add-module-exports": "0.2.1",

@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.2.0"></a>
+# [2.2.0](https://github.com/rexlabsio/vivid/compare/@rexlabs/plz-cli@2.1.0...@rexlabs/plz-cli@2.2.0) (2017-10-30)
+
+
+### Bug Fixes
+
+* **plz-cli:** Re-enable port redirection for `serve` ([b2805ce](https://github.com/rexlabsio/vivid/commit/b2805ce))
+
+
+### Features
+
+* **plz-cli:** Implement sane polyfill & minification minimums ([36a059d](https://github.com/rexlabsio/vivid/commit/36a059d))
+
+
+
+
 <a name="2.1.0"></a>
 # [2.1.0](https://github.com/rexlabsio/vivid/compare/@rexlabs/plz-cli@2.0.3...@rexlabs/plz-cli@2.1.0) (2017-10-23)
 
