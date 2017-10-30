@@ -86,7 +86,7 @@ plugins.uglify = ({ supportsElementStyles = true } = {}) =>
   new UglifyJSPlugin({
     uglifyOptions: merge(
       {
-        ecma: 8,
+        ecma: 5,
         beautify: false,
         compress: {
           warnings: false,

@@ -14,11 +14,13 @@ module.exports = ({ modulesType = 'commonjs' } = {}) => ({
     [
       'env',
       {
+        useBuiltIns: 'usage',
         modules: modulesType,
         targets: {
-          node: 7,
-          browsers: 'last 2 versions'
-        }
+          node: '8',
+          browsers: require('@rexlabs/browserlist-config')
+        },
+        exclude: ['es6.promise']
       }
     ],
     'stage-3',
@@ -30,8 +32,8 @@ module.exports = ({ modulesType = 'commonjs' } = {}) => ({
     [
       'transform-runtime',
       {
-        helpers: false,
-        polyfill: false,
+        helpers: true,
+        polyfill: true,
         regenerator: true
       }
     ],
