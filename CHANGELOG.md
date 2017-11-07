@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.3.0"></a>
+# [2.3.0](https://github.com/rexlabsio/vivid/compare/@rexlabs/plz-cli@2.2.0...@rexlabs/plz-cli@2.3.0) (2017-11-07)
+
+
+### Features
+
+* **plz-cli:** Add opt-in support for CSS Modules ([4ce3fec](https://github.com/rexlabsio/vivid/commit/4ce3fec))
+
+
+
+
 <a name="2.2.0"></a>
 # [2.2.0](https://github.com/rexlabsio/vivid/compare/@rexlabs/plz-cli@2.1.0...@rexlabs/plz-cli@2.2.0) (2017-10-30)
 
