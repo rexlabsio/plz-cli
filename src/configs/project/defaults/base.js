@@ -13,6 +13,7 @@ const { PROJECT_TYPE_MODULE } = require('../../../utils/constants');
 const plzConfigDefault = {
   projectType: PROJECT_TYPE_MODULE,
   buildDir: './',
+  cssModules: false,
   proxy: {},
   runtimeCompilation: true,
   storybook: {

@@ -16,12 +16,12 @@ rules.babel = ({ exclude = /node_modules/, include, config } = {}) => ({
   }
 });
 
-rules.css = ({ vendor, isExtracting } = {}) => {
+rules.css = ({ vendor, isExtracting, cssModules } = {}) => {
   const styleLoader = require.resolve('style-loader');
   const postcssLoaders = [
     {
       loader: require.resolve('css-loader'),
-      options: { importLoaders: 1 }
+      options: { importLoaders: 1, modules: Boolean(cssModules) }
     },
     {
       loader: require.resolve('postcss-loader'),

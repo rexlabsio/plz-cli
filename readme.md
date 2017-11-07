@@ -133,6 +133,7 @@ Config for the `plz` 🙏 cli is resolved from established configuration files [
 | :------------- | :------------- |
 | `projectType` | One of the follow types:<br/>`react-app`, `react-component`, `react-module` |
 | `buildDir` | The location of your project's build output.<br/><br/>For apps this is `public/`.<br/><br/>For modules this is at the root because modules output several bundle directories of their own:<br/><ul><li>`lib` (cjs)</li><li>`module/` (esm)</li></ul> |
+| `cssModules` | When enabled, CSS Modules can be imported into JS Modules.<br/>_eg. `import buttonStyles from './button-styles.css'`._ |
 | `runtimeCompilation` | When enabled, packages found in `node_modules/` that have a `package.json` `plz:main` field will be compiled & watched with Babel. |
 | `proxy` | A map of [proxy](#proxy-config) configs. |
 | `storybook` | All options for Storybook's runtime. _See [@storybook/addon-options][storybookoptions] for more details._<br/><br/><blockquote>Additionally, `babel` and `webpack` properties can will defined, following the rules of the other config middleware.</blockquote> |
@@ -149,6 +150,9 @@ plz build --project-type "react-app" --build-dir "./public"
 
 # Change storybook nested configs
 plz stories --storybook-show-down-panel
+
+# Enable CSS Modules for developer server
+plz serve --css-modules
 ```
 
 ### Example Config
@@ -159,6 +163,7 @@ plz stories --storybook-show-down-panel
 module.exports = {
   projectType: "react-app",
   buildDir: './app-build',
+  cssModules: false,
   runtimeCompilation: true,
   proxy: {
       '/api/v1': { target: 'http://localhost:8080' }

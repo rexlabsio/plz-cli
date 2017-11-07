@@ -3,6 +3,7 @@ const u = require('../../utils');
 const rules = require('../../configs/webpack/parts/rules');
 const aliases = require('../../configs/webpack/parts/aliases');
 const pluginPresets = require('../../configs/webpack/parts/plugin-presets');
+const loadCliConfig = require('../../utils/load-cli-config');
 
 const parts = {
   base: ({ babel } = {}) => ({
@@ -28,36 +29,41 @@ const parts = {
     }
   }),
 
-  dev: ({ status, reload } = {}) => ({
-    entry: [
-      require.resolve('../../configs/webpack/parts/polyfill.js'),
-      `${require.resolve('webpack-hot-middleware/client')}${reload
-        ? '?reload=true'
-        : ''}`,
-      u.to('src/index.js')
-    ],
+  dev: ({ status, reload, cssModules } = {}) => {
+    cssModules && u.debug('cssModules enabled for dev');
+    return {
+      entry: [
+        require.resolve('../../configs/webpack/parts/polyfill.js'),
+        `${require.resolve('webpack-hot-middleware/client')}${reload
+          ? '?reload=true'
+          : ''}`,
+        u.to('src/index.js')
+      ],
 
-    // NOTE: Nothing is outputted, but the dev-server needs this to not break.
-    output: {
-      path: u.cwdTo('public'),
-      filename: 'app.js',
-      publicPath: '/'
-    },
+      // NOTE: Nothing is outputted, but the dev-server needs this to not break.
+      output: {
+        path: u.cwdTo('public'),
+        filename: 'app.js',
+        publicPath: '/'
+      },
 
-    module: {
-      rules: [rules.css(), rules.css({ vendor: true })]
-    },
+      module: {
+        rules: [rules.css({ cssModules }), rules.css({ vendor: true })]
+      },
 
-    plugins: pluginPresets.devServer({ status }),
+      plugins: pluginPresets.devServer({ status }),
 
-    devtool: 'inline-source-map'
-  }),
+      devtool: 'inline-source-map'
+    };
+  },
 
-  build: ({ output = 'public' } = {}) => {
+  build: ({ output = 'public', cssModules } = {}) => {
     const production = process.env.NODE_ENV === 'production';
     const filenamePattern = production
       ? '[name].[chunkhash:8].js'
       : '[name].js';
+
+    cssModules && u.debug('cssModules enabled for build');
 
     return {
       entry: {
@@ -76,7 +82,7 @@ const parts = {
 
       module: {
         rules: [
-          rules.css({ isExtracting: true }),
+          rules.css({ isExtracting: true, cssModules }),
           rules.css({ vendor: true, isExtracting: true })
         ]
       },
@@ -90,10 +96,14 @@ const parts = {
 
 module.exports = (
   { babel, isBaseOnly, isBuild, status, reload, output } = {}
-) =>
-  isBaseOnly
+) => {
+  const { cssModules } = loadCliConfig();
+  return isBaseOnly
     ? parts.base({ babel })
     : merge(
       parts.base({ babel }),
-      isBuild ? parts.build({ output }) : parts.dev({ status, reload })
+      isBuild
+        ? parts.build({ output, cssModules })
+        : parts.dev({ status, reload, cssModules })
     );
+};

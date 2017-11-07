@@ -6,6 +6,7 @@ function cliConfigFromArgv (argv) {
   const argvConfig = {};
   if (argv.projectType) argvConfig.projectType = argv.projectType;
   if (argv.buildDir) argvConfig.buildDir = argv.buildDir;
+  if (argv.cssModules) argvConfig.cssModules = argv.cssModules;
   if (argv.runtimeCompilation) {
     argvConfig.runtimeCompilation = argv.runtimeCompilation;
   }

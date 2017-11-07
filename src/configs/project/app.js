@@ -28,5 +28,9 @@ const ourConfig = ({ isBaseOnly, isBuild, status, reload, output } = {}) =>
     baseConfig
   );
 
-module.exports = ({ isBaseOnly, isBuild, status, reload, output } = {}) =>
-  mergeUserConfig(ourConfig({ isBaseOnly, isBuild, status, reload, output }));
+module.exports = (
+  { isBaseOnly, isBuild, cssModules, status, reload, output } = {}
+) =>
+  mergeUserConfig(
+    ourConfig({ isBaseOnly, isBuild, cssModules, status, reload, output })
+  );

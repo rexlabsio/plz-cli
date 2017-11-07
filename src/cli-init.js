@@ -233,7 +233,7 @@ function parseCommand (cli) {
     };
 
     // Format all the storybook optional commands as: --storybook-<some-option>
-    _.forEach(require('./configs/project-defaults/base'), (val, key) => {
+    _.forEach(require('./configs/project/defaults/base'), (val, key) => {
       if (key === 'storybook') {
         _.forEach(val, (x, y) => registerProjArg(x, `${key}-${y}`));
       } else {
