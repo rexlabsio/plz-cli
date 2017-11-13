@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.3.1"></a>
+## [2.3.1](https://github.com/rexlabsio/vivid/compare/@rexlabs/plz-cli@2.3.0...@rexlabs/plz-cli@2.3.1) (2017-11-13)
+
+
+### Bug Fixes
+
+* **plz-cli:** Update to jest@^21.2.1 ([32e8b22](https://github.com/rexlabsio/vivid/commit/32e8b22))
+
+
+
+
 <a name="2.3.0"></a>
 # [2.3.0](https://github.com/rexlabsio/vivid/compare/@rexlabs/plz-cli@2.2.0...@rexlabs/plz-cli@2.3.0) (2017-11-07)
 
