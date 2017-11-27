@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.3.2"></a>
+## [2.3.2](https://github.com/rexlabsio/vivid/compare/@rexlabs/plz-cli@2.3.1...@rexlabs/plz-cli@2.3.2) (2017-11-27)
+
+
+### Bug Fixes
+
+* **plz-cli:** Remove prod flag for storybook sessions ([a8bb9d2](https://github.com/rexlabsio/vivid/commit/a8bb9d2))
+
+
+
+
 <a name="2.3.1"></a>
 ## [2.3.1](https://github.com/rexlabsio/vivid/compare/@rexlabs/plz-cli@2.3.0...@rexlabs/plz-cli@2.3.1) (2017-11-13)
 
