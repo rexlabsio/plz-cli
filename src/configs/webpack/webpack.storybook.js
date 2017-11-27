@@ -35,7 +35,6 @@ const {
 } = require('../../utils/constants');
 
 module.exports = function (storybookBaseConfig) {
-  process.env.NODE_ENV = 'production';
   const { projectType } = loadCliConfig();
 
   let cliConfig = null;
