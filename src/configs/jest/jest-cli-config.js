@@ -5,7 +5,7 @@ const {
   PROJECT_TYPE_REACT_APP
 } = require('../../utils/constants');
 
-export default () => {
+module.exports = () => {
   const { projectType } = loadCliConfig();
 
   let cliConfig = null;
