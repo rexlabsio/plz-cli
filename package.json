@@ -1,6 +1,6 @@
 {
   "name": "@rexlabs/plz-cli",
-  "version": "2.3.4",
+  "version": "2.3.5",
   "description": "Toolkit for creating, developing building & testing projects.",
   "engines": {
     "node": ">=7.x"

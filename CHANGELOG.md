@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.3.5"></a>
+## [2.3.5](https://github.com/rexlabsio/vivid/compare/@rexlabs/plz-cli@2.3.4...@rexlabs/plz-cli@2.3.5) (2017-11-28)
+
+
+### Bug Fixes
+
+* **plz-cli:** Blacklist node_modules in babel-jest when runtime compilation is disabled ([fefe08e](https://github.com/rexlabsio/vivid/commit/fefe08e))
+
+
+
+
 <a name="2.3.4"></a>
 ## [2.3.4](https://github.com/rexlabsio/vivid/compare/@rexlabs/plz-cli@2.3.3...@rexlabs/plz-cli@2.3.4) (2017-11-28)
 
