@@ -12,6 +12,8 @@ const fs = require('fs');
 const path = require('path');
 const resolve = require('resolve');
 const browserResolve = require('browser-resolve');
+const getCliConfig = require('../../configs/jest/jest-cli-config');
+const cliConfig = getCliConfig();
 
 function defaultResolver (path, options) {
   const resv = options.browser ? browserResolve : resolve;
@@ -35,13 +37,15 @@ module.exports = defaultResolver;
 global.__plz_pkg_registry = global.__plz_pkg_registry || new Set();
 const addToRegistry = x => global.__plz_pkg_registry.add(x);
 function enablePlzCompilation (pkg, pkgDir) {
-  const srcPath = pkg['plz:main'];
-  // Note: We should check the existence of src so that published packages don't
-  //       break app's that use plz
-  if (srcPath && fs.existsSync(path.resolve(pkgDir, srcPath))) {
-    addToRegistry(pkgDir);
-    return Object.assign({}, pkg, { main: srcPath });
-  } else {
-    return pkg;
+  if (cliConfig.runtimeCompilation) {
+    const srcPath = pkg['plz:main'];
+    // Note: We should check the existence of src so that published packages don't
+    //       break app's that use plz
+    if (srcPath && fs.existsSync(path.resolve(pkgDir, srcPath))) {
+      addToRegistry(pkgDir);
+      return Object.assign({}, pkg, { main: srcPath });
+    }
   }
+
+  return pkg;
 }
