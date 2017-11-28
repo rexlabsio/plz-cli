@@ -13,6 +13,7 @@
 const path = require('path');
 const u = require('../../utils');
 const aliases = require('../../configs/webpack/parts/aliases');
+const cliConfig = require('../../configs/jest/jest-cli-config')();
 const { assign, keys } = Object;
 
 /*
@@ -69,7 +70,7 @@ module.exports = {
   transform: {
     '^.+\\.jsx?$': u.to(__dirname, './jest-transform.js')
   },
-  transformIgnorePatterns: [],
+  transformIgnorePatterns: cliConfig.runtimeCompilation ? [] : ['node_modules'],
 
   /*
   |--------------------------------------------------------
