@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.3.6"></a>
+## [2.3.6](https://github.com/rexlabsio/vivid/compare/@rexlabs/plz-cli@2.3.5...@rexlabs/plz-cli@2.3.6) (2018-01-15)
+
+
+### Bug Fixes
+
+* **plz-cli:** Fix global scope issue with bluebird promise setup in react-app template. ([afca7f6](https://github.com/rexlabsio/vivid/commit/afca7f6))
+
+
+
+
 <a name="2.3.5"></a>
 ## [2.3.5](https://github.com/rexlabsio/vivid/compare/@rexlabs/plz-cli@2.3.4...@rexlabs/plz-cli@2.3.5) (2017-11-28)
 
