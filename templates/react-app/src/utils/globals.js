@@ -40,7 +40,7 @@ ${Object.keys(config)
 // Replaces Promise with the Bluebird implementation, and adds a global rejection
 // handler.
 global.Promise = BluebirdPromise;
-Promise.onPossiblyUnhandledRejection(function (rejectionError) {
+global.Promise.onPossiblyUnhandledRejection(function (rejectionError) {
   const error = new Error(
     'Promises rejections should always be handled with catch().'
   );
@@ -52,7 +52,7 @@ Promise.onPossiblyUnhandledRejection(function (rejectionError) {
 
 // Disable warnings for missed returns in Bluebird.
 // See https://github.com/petkaantonov/bluebird/issues/903
-Promise.config({
+global.Promise.config({
   // Disables all warnings.
   warnings: false
 });
