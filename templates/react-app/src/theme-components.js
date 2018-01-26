@@ -1,3 +1,0 @@
-const ELEMENT_STYLE_COMPONENTS = {};
-
-export default ELEMENT_STYLE_COMPONENTS;

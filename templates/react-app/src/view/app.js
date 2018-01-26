@@ -1,20 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import AppLayout from 'view/layouts/app';
 
 const styles = {
-  Container: {
-    boxSizing: 'border-box',
-    backgroundColor: 'lightpink',
-    color: '#d36f8d',
-    fontSize: '2rem',
-    fontWeight: '600',
-    height: '100vh',
-    width: '100vw',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
   Napolean: {
     borderRadius: 50,
     marginTop: 50,
@@ -23,22 +11,25 @@ const styles = {
   }
 };
 
-@connect(({ connection, app }) => ({ connection, app }))
+@connect(({ connection, session }) => ({ connection, session }))
 class {{PASCAL_NAME}}App extends Component {
-  static propTypes = { };
-
   render () {
+    const { session, connection } = this.props;
     return (
-      <div style={styles.Container}>
+      <AppLayout>
         <p>
-          {`I am ${this.props.app.ready ? 'ready' : 'not ready'} and incredibly ${this.props.connection.isOnline ? 'online' : 'offline'}.`}
+          {`I am ${session.ready
+            ? 'ready'
+            : 'not ready'} and incredibly ${connection.isOnline
+            ? 'online'
+            : 'offline'}.`}
         </p>
         <img
           style={styles.Napolean}
-          src='http://i.imgur.com/RsPkCMv.gif'
-          alt='getting ready'
+          src="http://i.imgur.com/RsPkCMv.gif"
+          alt="getting ready"
         />
-      </div>
+      </AppLayout>
     );
   }
 }

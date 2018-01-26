@@ -1,6 +1,6 @@
 import fp from 'lodash/fp';
 import api from 'axios';
-import config from 'src/config';
+import config from 'config';
 
 const initialState = {
   isOnline: false

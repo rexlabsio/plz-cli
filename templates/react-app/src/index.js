@@ -11,7 +11,7 @@
 */
 
 import 'utils/globals';
-import 'src/config';
+import 'config';
 
 import React, { Component } from 'react';
 import { render } from 'react-dom';
@@ -19,13 +19,13 @@ import { Provider } from 'react-redux';
 import { StylesProvider } from '@rexlabs/styling';
 import { LayoutProvider } from '@rexlabs/box';
 import { TextProvider } from '@rexlabs/text';
-import { store, formStore, FormProvider } from 'src/store';
+import { store, formStore, FormProvider } from 'store';
 import { api } from 'utils/api-client';
-import { initTheme, TEXTS, LAYOUTS } from 'src/theme';
+import { initTheme, TEXTS, LAYOUTS } from 'theme';
 import {{PASCAL_NAME}}App from 'view/app';
 
 // Note: Ensure this is imported last, as it needs to inject styles last.
-import ELEMENT_STYLE_COMPONENTS from 'src/theme-components';
+import ELEMENT_STYLE_COMPONENTS from 'theme/components';
 
 if (__DEV__) {
   window.app = {

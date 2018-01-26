@@ -10,7 +10,8 @@
 
 import _ from 'lodash';
 import { combineReducers } from 'redux';
-import { persistStore, autoRehydrate } from 'redux-persist';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import { batchedSubscribe } from 'redux-batched-subscribe';
 import { configureStore, apiClientMiddleware } from 'utils/redux';
 import {
@@ -23,43 +24,39 @@ import { configureReduxForms } from 'utils/redux-forms';
 | Core Models
 |------------------------
 */
-import app from 'data/models/local/app-state';
+import session from 'data/models/custom/session';
+
+/*
+ | Routing / Location Management (whereabouts)
+ |------------------------
+ */
+// TODO: add whereabouts once PR has been merged!
+
+/*
+ | Entity Models (Model Generator)
+ |------------------------
+ */
+// NOTE: import entity models here
 
 /*
 | Setup for Stores
 |------------------------
 */
-// TODO: Add router & models
-const reducers = combineReducers({ app, connection });
+// const entities = combineModels('entities', {});
+const reducers = combineReducers({ session, connection });
+const persistConfig = { key: 'root', storage: storage };
+const persistedReducer = persistReducer(persistConfig, reducers);
 
 const store = configureStore(
-  reducers,
-  [apiClientMiddleware, connectionMiddleware],
-  [
-    batchedSubscribe(_.debounce(notify => notify(), 10, { leading: true })),
-    autoRehydrate()
-  ]
+  persistedReducer,
+  [ apiClientMiddleware, connectionMiddleware ],
+  [ batchedSubscribe(_.debounce((notify) => notify(), 10, { leading: true })) ]
 );
 
-// NOTE: `session` store chunk doesn't yet exist
-// NOTE: `initSession` function should likely dispatch session setters
-const persistedStore = persistStore(
-  store,
-  {
-    whitelist: ['session'],
-    keyPrefix: 'com.rex.{{SLUGGED_NAME}}'
-  },
-  () => {
-    const initSession = () => Promise.resolve();
-    initSession()
-      .then(() => store.dispatch(app.actionCreators.setReady()))
-      .catch(e => {
-        console.error('Store rehydration failed.');
-        console.error(e);
-        store.dispatch(app.actionCreators.setReady());
-      });
-  }
-);
+const persistedStore = persistStore(store, null, () => {
+  // Add more init logic here if necessary
+  store.dispatch(session.actionCreators.init()).catch(console.warn);
+});
 
 if (__DEV__) {
   window.purgePersistedStore = persistedStore.purge;

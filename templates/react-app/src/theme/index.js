@@ -1,6 +1,6 @@
 /*
 |-------------------------------------------------------------------------------
-| App "theme"
+| App Styling Constants
 |-------------------------------------------------------------------------------
 |
 | The theme of an app encompasses:
@@ -13,12 +13,12 @@
 */
 
 import { insertCss, reset, keyframes } from '@rexlabs/styling';
+import COMPONENTS from './components';
 
 export const COLORS = {};
 export const PADDINGS = {};
 export const FONT = {};
 export const BORDERS = {};
-export const TRANSITIONS = {};
 export const EASINGS = {};
 export const SHADOWS = {};
 
@@ -26,19 +26,19 @@ export const LAYOUTS = {};
 export const TEXTS = {};
 
 export const UTILS = {
-  truncate: {
+  TRUNCATE: {
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis'
   }
 };
 
-export const FRAMES = {
-  fadeIn: keyframes({
+export const KEYFRAMES = {
+  FADE_IN: keyframes({
     '0%': { opacity: 0 },
     '100%': { opacity: 1 }
   }),
-  fadeOut: keyframes({
+  FADE_OUT: keyframes({
     '0%': { opacity: 1 },
     '100%': { opacity: 0 }
   })

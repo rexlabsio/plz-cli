@@ -8,7 +8,7 @@
 |
 */
 
-import config from 'src/config';
+import config from 'config';
 import BluebirdPromise from 'bluebird';
 
 if (!global) {
