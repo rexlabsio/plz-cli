@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.4.0"></a>
+# [2.4.0](https://github.com/rexlabsio/vivid/compare/@rexlabs/plz-cli@2.3.6...@rexlabs/plz-cli@2.4.0) (2018-01-29)
+
+
+
+
+**Note:** Version bump only for package @rexlabs/plz-cli
+
 <a name="2.3.6"></a>
 ## [2.3.6](https://github.com/rexlabsio/vivid/compare/@rexlabs/plz-cli@2.3.5...@rexlabs/plz-cli@2.3.6) (2018-01-15)
 
