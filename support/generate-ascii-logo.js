@@ -15,7 +15,9 @@
 const pkg = require('../package.json');
 const figlet = require('figlet');
 
-const name = Object.keys(pkg.bin)[0].split('').join(' ');
+const name = Object.keys(pkg.bin)[0]
+  .split('')
+  .join(' ');
 const logo = figlet
   .textSync(name, { font: 'Larry 3D' })
   .replace(/(^|\n)\s+?$/, '')
