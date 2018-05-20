@@ -114,8 +114,8 @@ const REMOVALS = [
 ];
 
 const memoizeSingle = fn => {
-  let cache = null,
-    lastArg = null;
+  let cache = null;
+  let lastArg = null;
   return (arg, ...args) => {
     if (arg !== lastArg) {
       lastArg = arg;
