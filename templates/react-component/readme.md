@@ -1,4 +1,4 @@
-# {{TITLE_NAME}} - Heidi Component
+# {{TITLE_NAME}} - Vivid Component
 
 {{AUTHOR_NAME}}, describe {{SLUGGED_NAME}} here.
 
