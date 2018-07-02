@@ -105,7 +105,7 @@ async function getServerOptions (argv) {
   let port = argv.port || DEFAULT_PORT;
   const suggestedPort = await detectPort(port, host);
 
-  if (suggestedPort !== port) {
+  if (parseInt(suggestedPort) !== parseInt(port)) {
     u.clearConsole();
     // console.log(u.bold.magenta(`${u.emoji('😭')}Port ${u.error(port)} is already being used.`));
     // console.log();
