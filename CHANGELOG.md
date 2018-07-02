@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.4.1"></a>
+## [2.4.1](https://github.com/rexlabsio/vivid/compare/@rexlabs/plz-cli@2.4.0...@rexlabs/plz-cli@2.4.1) (2018-07-02)
+
+
+### Bug Fixes
+
+* **plz-cli:** Fix false negative issue when forcing a specific port ([f4d3197](https://github.com/rexlabsio/vivid/commit/f4d3197))
+* **plz-cli:** Remove "Heidi" from component readme template ([4bcad21](https://github.com/rexlabsio/vivid/commit/4bcad21))
+
+
+
+
 <a name="2.4.0"></a>
 # [2.4.0](https://github.com/rexlabsio/vivid/compare/@rexlabs/plz-cli@2.3.6...@rexlabs/plz-cli@2.4.0) (2018-01-29)
 
