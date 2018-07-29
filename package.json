@@ -26,14 +26,15 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@rexlabs/browserlist-config": "^1.0.0",
-    "@storybook/addon-actions": "3.2.13",
-    "@storybook/addon-info": "3.2.13",
-    "@storybook/addon-knobs": "3.2.13",
-    "@storybook/addon-options": "3.2.13",
-    "@storybook/addon-storyshots": "3.2.13",
-    "@storybook/addons": "3.2.13",
-    "@storybook/channels": "3.2.13",
-    "@storybook/react": "3.2.13",
+    "@storybook/addon-actions": "3.4.8",
+    "@storybook/addon-a11y": "3.4.8",
+    "@storybook/addon-info": "3.4.8",
+    "@storybook/addon-knobs": "3.4.8",
+    "@storybook/addon-options": "3.4.8",
+    "@storybook/addon-storyshots": "3.4.8",
+    "@storybook/addons": "3.4.8",
+    "@storybook/channels": "3.4.8",
+    "@storybook/react": "3.4.8",
     "address": "1.0.3",
     "autoprefixer": "6.7.0",
     "babel-cli": "6.26.0",
@@ -107,7 +108,7 @@
     "yargs": "^8.0.2"
   },
   "peerDependencies": {
-    "react": "^15.5.0",
-    "react-dom": "^15.5.0"
+    "react": ">=15.0.0",
+    "react-dom": ">=15.0.0"
   }
 }

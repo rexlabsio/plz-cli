@@ -35,6 +35,7 @@
 import * as storybook from '@storybook/react';
 import { setOptions as setStorybookOptions } from '@storybook/addon-options';
 import * as knobs from '@storybook/addon-knobs';
+import * as a11y from '@storybook/addon-a11y';
 import { action } from '@storybook/addon-actions';
 import { heidiAddon, withReadme } from './addons/heidi-addon';
 import {
@@ -53,7 +54,7 @@ function loadStories () {
   setStorybookOptions(loadStorybookConfig());
   // Adds the '.addStory(storyConfig)' api to storybook
   storybook.setAddon(heidiAddon);
-  const addons = { knobs, action };
+  const addons = { knobs, action, a11y };
 
   /*
   |-------------------------------------------------------------------------------
