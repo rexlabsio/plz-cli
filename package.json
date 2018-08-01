@@ -1,6 +1,6 @@
 {
   "name": "@rexlabs/plz-cli",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "Toolkit for creating, developing building & testing projects.",
   "engines": {
     "node": ">=7.x"
@@ -26,8 +26,8 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@rexlabs/browserlist-config": "^1.0.0",
-    "@storybook/addon-actions": "3.4.8",
     "@storybook/addon-a11y": "3.4.8",
+    "@storybook/addon-actions": "3.4.8",
     "@storybook/addon-info": "3.4.8",
     "@storybook/addon-knobs": "3.4.8",
     "@storybook/addon-options": "3.4.8",
